@@ -12,7 +12,7 @@
 #include <CLogFile.h>
 
 CFileTransfer::CFileTransfer(bool bIsResource, String strHost, unsigned short usPort, String strName, CFileChecksum checksum)
-							: m_bIsResource(bIsResource), m_strName(strName), m_checksum(checksum), 
+							: m_bIsResource(bIsResource), m_strName(strName), m_checksum(checksum),
 							  m_bComplete(false), m_bSucceeded(false), m_strError("None")
 {
 	// Set up a local file/directory for this resource
@@ -66,13 +66,17 @@ bool CFileTransfer::Download()
 		m_bComplete = true;
 		m_bSucceeded = false;
 		m_strError.Format("Http GET failed for file %s (%s)", m_strName.Get(), m_httpClient.GetLastErrorString().Get());
+		fclose(fFile);
 		return false;
 	}
-	
+
 	// Download data to file:
 	m_httpClient.SetFile(fFile);
-	while(m_httpClient.IsBusy())
-			m_httpClient.Process();
+
+	while(m_httpClient.IsBusy()) {
+		m_httpClient.Process();
+		// todo: busy wait
+	}
 
 	// Close our downloaded file
 	fclose(fFile);

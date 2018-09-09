@@ -11,9 +11,9 @@
 #include <CLogFile.h>
 
 CIVWeaponInfo::CIVWeaponInfo()
-	: m_pWeaponInfo(NULL)
+	: m_weaponType (WEAPON_TYPE_MAX)
+	, m_pWeaponInfo(NULL)
 {
-	m_pWeaponInfo = NULL;
 }
 
 CIVWeaponInfo::CIVWeaponInfo(eWeaponType weaponType, IVWeaponInfo * pWeaponInfo)

@@ -317,7 +317,7 @@ String GetKeyNameByScan(DWORD dwCode)
 
 // event guiVisibleChanged(string guiName)
 bool OnVisibleChanged(const CEGUI::EventArgs &eventArgs)
-{	
+{
 	CEvents * pEvents = g_pClient->GetEvents();
 	String eventName("guiVisibleChanged");
 
@@ -345,7 +345,7 @@ bool OnShown(const CEGUI::EventArgs &eventArgs)
 
 // event guiKeyPress(string guiName, string key, string keyState)
 bool OnKeyPress(const CEGUI::KeyEventArgs &eArgs, String keyState)
-{	
+{
 	CEvents * pEvents = g_pClient->GetEvents();
 	String eventName("guiKeyPress");
 
@@ -428,7 +428,7 @@ bool OnClick(const CEGUI::EventArgs &eventArgs)
 
 	if(!pEvents->IsEventRegistered(eventName))
 		return false;
-	
+
 	const CEGUI::MouseEventArgs eArgs = static_cast<const CEGUI::MouseEventArgs&>(eventArgs);
 	CEGUI::Window * pWindow = eArgs.window;
 	CSquirrel * pScript = g_pClient->GetClientScriptManager()->GetGUIManager()->GetScript(pWindow);
@@ -452,7 +452,7 @@ bool OnMouseEnters(const CEGUI::EventArgs &eventArgs)
 	const CEGUI::MouseEventArgs eArgs = static_cast<const CEGUI::MouseEventArgs&>(eventArgs);
 	CEGUI::Window * pWindow = eArgs.window;
 	CSquirrel * pScript = g_pClient->GetClientScriptManager()->GetGUIManager()->GetScript(pWindow);
-	
+
 	CSquirrelArguments pArguments;
 	pArguments.push(pWindow->getName().c_str());
 	pEvents->Call(eventName, &pArguments, pScript);
@@ -471,7 +471,7 @@ bool OnMouseMove(const CEGUI::EventArgs &eventArgs)
 	const CEGUI::MouseEventArgs eArgs = static_cast<const CEGUI::MouseEventArgs&>(eventArgs);
 	CEGUI::Window * pWindow = eArgs.window;
 	CSquirrel * pScript = g_pClient->GetClientScriptManager()->GetGUIManager()->GetScript(pWindow);
-	
+
 	CSquirrelArguments pArguments;
 	pArguments.push(pWindow->getName().c_str());
 	pEvents->Call(eventName, &pArguments, pScript);
@@ -490,7 +490,7 @@ bool OnMouseLeaves(const CEGUI::EventArgs &eventArgs)
 	const CEGUI::MouseEventArgs eArgs = static_cast<const CEGUI::MouseEventArgs&>(eventArgs);
 	CEGUI::Window * pWindow = eArgs.window;
 	CSquirrel * pScript = g_pClient->GetClientScriptManager()->GetGUIManager()->GetScript(pWindow);
-	
+
 	CSquirrelArguments pArguments;
 	pArguments.push(pWindow->getName().c_str());
 	pEvents->Call(eventName, &pArguments, pScript);
@@ -560,7 +560,7 @@ bool OnWindowClose(const CEGUI::EventArgs &eventArgs)
 }
 
 extern void SubscribeGuiEvents(CEGUI::Window * pWindow)
-{		
+{
 	pWindow->subscribeEvent(CEGUI::Window::EventMouseClick, CEGUI::Event::Subscriber(&OnClick));
 	pWindow->subscribeEvent(CEGUI::Window::EventMouseEnters, CEGUI::Event::Subscriber(&OnMouseEnters));
 	pWindow->subscribeEvent(CEGUI::Window::EventMouseMove, CEGUI::Event::Subscriber(&OnMouseMove));
@@ -666,8 +666,8 @@ _MEMBER_FUNCTION_IMPL(GUIFont, drawText)
 
 	// Get our GUI instance
 	CGUI * pGUI = g_pClient->GetGUI();
-	
-	if(sbRelative != 0) 
+
+	if(sbRelative != 0)
 	{
 		x *= pGUI->GetDisplayWidth();
 		y *= pGUI->GetDisplayHeight();
@@ -925,7 +925,7 @@ _MEMBER_FUNCTION_IMPL(GUIElement, setParent)
 		sq_pushbool(pVM, false);
 		return 1;
 	}
-	
+
 	CEGUI::Window * pParentWindow = NULL;
 
 	try
@@ -1099,7 +1099,7 @@ _MEMBER_FUNCTION_IMPL(GUIText, constructor)
 	pWindow->setProperty("BackgroundEnabled", "false");
 	pWindow->setFont(pGUI->GetFont("tahoma-bold"));
 	pWindow->setProperty("TextColours", "tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF");
-	
+
 	SubscribeGuiEvents(pWindow);
 
 	sq_pushbool(pVM, true);
@@ -1121,7 +1121,7 @@ _MEMBER_FUNCTION_IMPL(GUIText, setText)
 	CClientScriptManager * pClientScriptManager = g_pClient->GetClientScriptManager();
 	pClientScriptManager->GetGUIManager()->Add(pWindow, pClientScriptManager->GetScriptingManager()->Get(pVM));
 
-	// We have to use the element's font to get the real extent 
+	// We have to use the element's font to get the real extent
 	CEGUI::Font * pFont = pWindow->getFont (true);
 	float fTextWidth = pFont->getTextExtent(text);
 	float fTextHeight = pFont->getFontHeight();
@@ -1168,7 +1168,7 @@ _MEMBER_FUNCTION_IMPL(GUIEditBox, constructor)
 	//_SET_RELEASE_HOOK(GUIElement);
 	CClientScriptManager * pClientScriptManager = g_pClient->GetClientScriptManager();
 	pClientScriptManager->GetGUIManager()->Add(pWindow, pClientScriptManager->GetScriptingManager()->Get(pVM));
-	pWindow->setVisible(true);	
+	pWindow->setVisible(true);
 
 	SubscribeGuiEvents(pWindow);
 	pWindow->subscribeEvent(CEGUI::Editbox::EventTextChanged, CEGUI::Event::Subscriber(&OnEditboxTextChanged));
@@ -1191,7 +1191,7 @@ _MEMBER_FUNCTION_IMPL(GUIMultiLineEditBox, constructor)
 	//_SET_RELEASE_HOOK(GUIElement);
 	CClientScriptManager * pClientScriptManager = g_pClient->GetClientScriptManager();
 	pClientScriptManager->GetGUIManager()->Add(pWindow, pClientScriptManager->GetScriptingManager()->Get(pVM));
-	pWindow->setVisible(true);	
+	pWindow->setVisible(true);
 
 	SubscribeGuiEvents(pWindow);
 	pWindow->subscribeEvent(CEGUI::Editbox::EventTextChanged, CEGUI::Event::Subscriber(&OnEditboxTextChanged));
@@ -1214,7 +1214,7 @@ _MEMBER_FUNCTION_IMPL(GUIMultiColumnList, constructor)
 	//_SET_RELEASE_HOOK(GUIElement);
 	CClientScriptManager * pClientScriptManager = g_pClient->GetClientScriptManager();
 	pClientScriptManager->GetGUIManager()->Add(pWindow, pClientScriptManager->GetScriptingManager()->Get(pVM));
-	pWindow->setVisible(true);	
+	pWindow->setVisible(true);
 
 	SubscribeGuiEvents(pWindow);
 	pWindow->subscribeEvent(CEGUI::MultiColumnList::EventSelectionChanged, CEGUI::Event::Subscriber(&OnRowClick));
@@ -1269,17 +1269,17 @@ _MEMBER_FUNCTION_IMPL(GUIMultiColumnList, setItem)
 	const char * value;
 	//CEGUI::colour color(0xFFFFFFFF); // TODO: color from hex param
 
-	// FIXME: order of params -> invert	
+	// FIXME: order of params -> invert
 	sq_getstring(pVM, 2, &value);
 	sq_getinteger(pVM, 3, &sqiColumn);
 	sq_getinteger(pVM, 4, &sqiRow);
-	
+
 	try
 	{
 		MultiColumnListItem* pItem = new MultiColumnListItem(value);
 		//pItem->setTextColours(color);
 		pWindow->setItem(pItem, sqiColumn, sqiRow);
-		
+
 		sq_pushbool(pVM, true);
 	}
 	catch(...)
@@ -1417,17 +1417,21 @@ _MEMBER_FUNCTION_IMPL(GUIImage, constructor)
 
 		CEGUI::ImagesetManager::getSingleton().createFromImageFile(szName.C_String(), filename, "resources");
 		CGUIStaticImage * pImage = pGUI->CreateGUIStaticImage(CEGUI::String(szName.C_String()));
-		
-		pImage->setProperty("FrameEnabled", "false");
-		pImage->setProperty("BackgroundEnabled", "false");
-		pImage->setProperty("Image", String("set:%s image:full_image", szName.C_String()).C_String());
 
 		if(!pImage || SQ_FAILED(sq_setinstance(pVM, pImage)))
 		{
+			if (pImage) {
+				pGUI->RemoveGUIWindow(pImage);
+			}
+
 			CLogFile::Printf("Can't create GUIImage.");
 			sq_pushbool(pVM, false);
 			return 1;
 		}
+
+		pImage->setProperty("FrameEnabled", "false");
+		pImage->setProperty("BackgroundEnabled", "false");
+		pImage->setProperty("Image", String("set:%s image:full_image", szName.C_String()).C_String());
 
 		//_SET_RELEASE_HOOK(GUIElement);
 		CClientScriptManager * pClientScriptManager = g_pClient->GetClientScriptManager();
@@ -1482,7 +1486,7 @@ _MEMBER_FUNCTION_IMPL(GUIProgressBar, setValue)
  		sq_pushbool(pVM, false);
  	}
 
- 	char szNewProgress[4];
+	char szNewProgress[128] = { 0 };
 	sprintf(szNewProgress, "%f", fCurrentValue*0.01);
 	pWindow->setProperty("CurrentProgress", szNewProgress);
 

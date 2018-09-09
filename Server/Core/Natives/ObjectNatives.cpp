@@ -193,7 +193,7 @@ SQInteger CObjectNatives::CreateExplosion(SQVM * pVM)
 	sq_getbool(pVM,-2,&bInvisible);
 	sq_getfloat(pVM,-1,&fCameraShake);
 
-	g_pObjectManager->CreateExplosion(vecPos, uiExplosionType, fRadius, bSound, bInvisible, fCameraShake);
+	g_pObjectManager->CreateExplosion(vecPos, uiExplosionType, fRadius, bSound == TRUE, bInvisible == TRUE, fCameraShake);
 
 	sq_pushbool(pVM,true);
 	return 1;
@@ -399,7 +399,7 @@ SQInteger CObjectNatives::SetDimension(SQVM * pVM)
 
 	sq_getinteger(pVM, -1, &iDimension);
 	sq_getentity(pVM, -2, &objectId);
-	
+
 	g_pObjectManager->SetDimension(objectId, iDimension);
 
 	sq_pushbool(pVM, true);
@@ -407,7 +407,7 @@ SQInteger CObjectNatives::SetDimension(SQVM * pVM)
 }
 
 SQInteger CObjectNatives::GetDimension(SQVM * pVM)
-{ 
+{
 	EntityId objectId;
 
 	sq_getentity(pVM, -1, &objectId);

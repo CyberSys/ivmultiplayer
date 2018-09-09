@@ -115,7 +115,7 @@ namespace CEGUI
 			Pointer to a Window instance.
 		*/
 		Window * getContentPane() const;
-			
+
 
 	protected:
 		/*!

@@ -23,11 +23,11 @@ public:
 	CVehicleManager();
 	~CVehicleManager();
 
-	EntityId Add(int iModelId, CVector3 vecSpawnPosition, CVector3 vecSpawnRotation, BYTE byteColor1, BYTE byteColor2, BYTE byteColor3, BYTE byteColor4, int respawn_delay = -1);
-	void Remove(EntityId vehicleId);
+	EntityId Add(int iModelId, CVector3 vecSpawnPosition, CVector3 vecSpawnRotation, BYTE byteColor1, BYTE byteColor2, BYTE byteColor3, BYTE byteColor4, int respawn_delay = -1) override;
+	void Remove(EntityId vehicleId) override;
 	void HandleClientJoin(EntityId playerId);
-	bool DoesExist(EntityId vehicleId);
-	int GetVehicleCount();
+	bool DoesExist(EntityId vehicleId) override;
+	int GetVehicleCount() override;
 	void Process();
-	CVehicle * GetAt(EntityId vehicleId);
+	CVehicle * GetAt(EntityId vehicleId) override;
 };

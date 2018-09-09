@@ -13,7 +13,8 @@
 #include <CLogFile.h>
 
 CIVPed::CIVPed() : CIVPhysical(),
-	m_pPedTaskManager(NULL)
+	m_pPedTaskManager(NULL),
+	m_pPedWeapons(NULL)
 {
 }
 

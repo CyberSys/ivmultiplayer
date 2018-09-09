@@ -56,14 +56,21 @@ void CPatcher::InstallNopPatch(DWORD dwAddress, int iSize)
 
 void * CPatcher::InstallDetourPatchInternal(DWORD dwAddress, DWORD dwDetourAddress, BYTE byteType, int iSize)
 {
+	size_t totalPatchSize = iSize + 5;
+
 	// Allocate the trampoline memory
-	BYTE * pbyteTrampoline = (BYTE *)malloc(iSize + 5);
+	BYTE * pbyteTrampoline = (BYTE *)malloc(totalPatchSize);
+	if (!pbyteTrampoline) {
+		return NULL;
+	}
+
+	memset(pbyteTrampoline, 0xfe, totalPatchSize);
 
 	// Unprotect the trampoline memory
-	Unprotect((DWORD)pbyteTrampoline, (iSize + 5));
+	Unprotect((DWORD)pbyteTrampoline, totalPatchSize);
 
 	// Unprotect the address memory
-	ProtectionInfo protectionInfo = Unprotect(dwAddress, (iSize + 5));
+	ProtectionInfo protectionInfo = Unprotect(dwAddress, totalPatchSize);
 
 	// Copy the overwritten address memory to the trampoline memory
 	memcpy(pbyteTrampoline, (void *)dwAddress, iSize);
@@ -161,9 +168,9 @@ DWORD CPatcher::GetFunctionAddress(char * szLibrary, unsigned int uOrdinal)
 	return GetFunctionAddress(szLibrary, (char *)MAKELONG(uOrdinal, 0));
 }
 
-void * CPatcher::InstallDetourPatch(char * szLibrary, char * szFunction, DWORD dwFunctionAddress)
+void * CPatcher::InstallDetourPatch(char * szLibrary, char * szFunction, DWORD dwFunctionAddress, int iSize /*= 5*/)
 {
-	return InstallDetourPatchInternal(GetFunctionAddress(szLibrary, szFunction), dwFunctionAddress, X86_JMP, 5);
+	return InstallDetourPatchInternal(GetFunctionAddress(szLibrary, szFunction), dwFunctionAddress, X86_JMP, iSize);
 }
 
 void * CPatcher::InstallDetourPatch(char * szLibrary, unsigned int uOrdinal, DWORD dwFunctionAddress)
@@ -191,16 +198,23 @@ BYTE CPatcher::InstallDetourPatchWithData(char * szLibrary, unsigned int uOrdina
 	DWORD dwAddress = GetFunctionAddress(szLibrary, uOrdinal);
 	DWORD dwDetourAddress = dwFunctionAddress;
 	BYTE byteType = X86_JMP;
+
 	int iSize = 5;
+	size_t totalPatchSize = iSize + 5;
 
 	// Allocate the trampoline memory
-	BYTE * pbyteTrampoline = (BYTE *)malloc(iSize + 5);
+	BYTE * pbyteTrampoline = (BYTE *)malloc(totalPatchSize);
+	if (pbyteTrampoline == NULL) {
+		return 0;
+	}
+
+	memset(pbyteTrampoline, 0xfe, totalPatchSize);
 
 	// Unprotect the trampoline memory
-	Unprotect((DWORD)pbyteTrampoline, (iSize + 5));
+	Unprotect((DWORD)pbyteTrampoline, totalPatchSize);
 
 	// Unprotect the address memory
-	ProtectionInfo protectionInfo = Unprotect(dwAddress, (iSize + 5));
+	ProtectionInfo protectionInfo = Unprotect(dwAddress, totalPatchSize);
 
 	// Copy the overwritten address memory to the trampoline memory
 	memcpy(pbyteTrampoline, (void *)dwAddress, iSize);
@@ -217,13 +231,16 @@ BYTE CPatcher::InstallDetourPatchWithData(char * szLibrary, unsigned int uOrdina
 	// Re-protect the address memory
 	Reprotect(protectionInfo);
 
+	DWORD oldProt;
+	VirtualProtect(pbyteTrampoline, totalPatchSize, PAGE_EXECUTE, &oldProt);
+
 	return (pbyteTrampoline != NULL);
 }
 
-void CPatcher::InstallPushPatch(DWORD dwAddress, DWORD dwFunc) 
-{ 
-     ProtectionInfo protectionInfo = Unprotect(dwAddress, 5); 
-     *(BYTE*)(dwAddress) = 0x68; 
-     *(DWORD*)(dwAddress+1) = dwFunc;  
-     Reprotect(protectionInfo); 
+void CPatcher::InstallPushPatch(DWORD dwAddress, DWORD dwFunc)
+{
+     ProtectionInfo protectionInfo = Unprotect(dwAddress, 5);
+     *(BYTE*)(dwAddress) = 0x68;
+     *(DWORD*)(dwAddress+1) = dwFunc;
+     Reprotect(protectionInfo);
 }

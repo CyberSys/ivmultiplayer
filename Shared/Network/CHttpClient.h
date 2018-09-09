@@ -72,7 +72,7 @@ private:
 
 public:
 	CHttpClient();
-	~CHttpClient();
+	virtual ~CHttpClient();
 
 	virtual bool           IsConnected() { return m_bConnected; }
 	virtual bool           IsInvalid() { return (m_status == HTTP_STATUS_INVALID); }

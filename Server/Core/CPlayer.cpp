@@ -21,7 +21,7 @@ extern CVehicleManager * g_pVehicleManager;
 extern CEvents * g_pEvents;
 extern CModuleManager * g_pModuleManager;
 
-unsigned int playerColors[] = 
+unsigned int playerColors[] =
 {
 	0xE59338FF, 0xEEDC2DFF, 0xD8C762FF, 0x3FE65CFF, 0xFF8C13FF, 0xC715FFFF, 0x20B2AAFF, 0xDC143CFF,
 	0x6495EDFF, 0xf0e68cFF, 0x778899FF, 0xFF1493FF, 0xF4A460FF, 0xEE82EEFF, 0xFFD720FF, 0x8b4513FF,
@@ -74,7 +74,7 @@ CPlayer::CPlayer(EntityId playerId, String strName)
 
 CPlayer::~CPlayer()
 {
-	
+
 }
 
 String CPlayer::GetIp()
@@ -487,7 +487,7 @@ void CPlayer::StoreSmallSync(SmallSyncData * syncPacket, bool bHasAimSyncData, A
 
 void CPlayer::Process()
 {
-	
+
 }
 
 bool CPlayer::SetName(String strName)
@@ -497,7 +497,7 @@ bool CPlayer::SetName(String strName)
 
 	if(strName == m_strName || g_pPlayerManager->IsNameInUse(strName))
 		return false;
-	
+
 	m_strName = strName;
 	CBitStream bsSend;
 	bsSend.Write(m_playerId);
@@ -865,25 +865,22 @@ void CPlayer::UpdateHeadMoveSync(CVector3 vecHead)
 void CPlayer::SetDimension(unsigned char ucDimension)
 {
 	m_ucDimension = ucDimension;
+
 	CBitStream bsSend;
-	bsSend.Write(this->GetPlayerId());
-	bsSend.Write(this->GetDimension());
+	bsSend.Write(m_playerId);
+	bsSend.Write(m_ucDimension);
 	g_pNetworkManager->RPC(RPC_ScriptingSetPlayerDimension, &bsSend, PRIORITY_HIGH, RELIABILITY_RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
 }
 
 unsigned int CPlayer::GetFileChecksum(int iFile)
 {
-	if(iFile >= 0 && iFile < 2) {
-		// handling.dat
-		if(iFile == 0)
-			return m_FileCheck.uiHandleFileChecksum;
-
-		// gta.dat
-		if(iFile == 1) 
-			return m_FileCheck.uiGTAFileChecksum;
-
-		return -1;
+	// TODO: ENUM!
+	switch (iFile) {
+	case 0:
+		return m_FileCheck.uiHandleFileChecksum;
+	case 1:
+		return m_FileCheck.uiGTAFileChecksum;
+	default:
+		return 0xffffffff;
 	}
-	else
-		return -1;
 }

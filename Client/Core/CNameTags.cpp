@@ -52,14 +52,8 @@ void CNameTags::DrawTag(String strName, unsigned int uiHealth, unsigned int uiAr
 	pGUI->DrawText(strName, CEGUI::Vector2(fX, fY), CEGUI::colour(dwColor), m_pFont, false, false);
 
 	// Ensure correct health and armor values
-	if(uiHealth < 0)
-		uiHealth = 0;
-
 	if(uiHealth > 100)
 		uiHealth = 100;
-
-	if(uiArmour < 0)
-		uiArmour = 0;
 
 	if(uiArmour > 100)
 		uiArmour = 100;
@@ -139,7 +133,7 @@ void CNameTags::Draw()
 		CVector3 vecWorldPosition;
 		Vector2 vecScreenPosition;
 		pLocalPlayer->GetPosition(vecLocalPlayerPosition);
-			
+
 		// Render player tags
 		for(EntityId i = 0; i < MAX_PLAYERS; i++)
 		{
@@ -155,7 +149,7 @@ void CNameTags::Draw()
 
 				if(!pPlayer->IsOnScreen())
 					continue;
-					
+
 				// Convert the position to a screen position
 				if(!CGame::GetScreenPositionFromWorldPosition(vecWorldPosition, vecScreenPosition))
 					continue;
@@ -181,7 +175,7 @@ void CNameTags::Draw()
 
 		// Get our actor manager
 		CActorManager * pActorManager = g_pClient->GetActorManager();
-		
+
 		// Render actor tags
 		for(EntityId i = 0; i < MAX_ACTORS; i++)
 		{
@@ -191,7 +185,7 @@ void CNameTags::Draw()
 				// Get the player position + add z coord
 				vecWorldPosition = pActorManager->GetPosition(i);
 				vecWorldPosition.fZ += 1.0f;
-					
+
 				// Convert the position to a screen position
 				if(!CGame::GetScreenPositionFromWorldPosition(vecWorldPosition, vecScreenPosition))
 					continue;

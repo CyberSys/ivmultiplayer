@@ -13,6 +13,7 @@
 #include <SharedUtility.h>
 
 CServerQuery::CServerQuery()
+	: m_pfnServerQueryHandler(NULL)
 {
 	// If windows startup winsock
 #ifdef WIN32
@@ -170,7 +171,7 @@ void CServerQuery::Process()
 		// Call the server query callback (if we have one)
 		if(m_pfnServerQueryHandler)
 			m_pfnServerQueryHandler(pServerQuery->strHost, pServerQuery->usPort, pServerQuery->strQuery, &bitStream);
-		
+
 		// Remove the server query
 		delete pServerQuery;
 		for(std::list<ServerQueryItem *>::iterator iter = m_serverQueryList.begin(); iter != m_serverQueryList.end(); iter++)

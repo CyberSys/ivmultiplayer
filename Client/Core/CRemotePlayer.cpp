@@ -37,7 +37,7 @@ bool CRemotePlayer::Spawn(int iModelId, CVector3 vecSpawnPos, float fSpawnHeadin
 	{
 		if(IsSpawned())
 			return false;
-		
+
 		g_pClient->GetStreamer()->ForceStreamIn(this);
 		SetCanBeStreamedIn(true);
 
@@ -65,9 +65,9 @@ void CRemotePlayer::Destroy()
 	CNetworkPlayer::Destroy();
 }
 
-void CRemotePlayer::Kill()
+void CRemotePlayer::Kill(bool bInstantly /*= false*/)
 {
-	CNetworkPlayer::Kill();
+	CNetworkPlayer::Kill(bInstantly);
 
 	if(IsSpawned())
 		m_stateType = STATE_TYPE_DEATH;
@@ -96,7 +96,7 @@ void CRemotePlayer::StoreOnFootSync(OnFootSyncData * syncPacket, bool bHasAimSyn
 	// Check if the player isn't available
 	if(!g_pClient->GetPlayerManager()->IsActive(GetPlayerId()))
 		return;
-	
+
 	// If we are in a vehicle remove ourselves from it
 	if(IsInVehicle())
 		RemoveFromVehicle();
@@ -106,13 +106,13 @@ void CRemotePlayer::StoreOnFootSync(OnFootSyncData * syncPacket, bool bHasAimSyn
 		m_pLastSyncData = syncPacket;
 	else
 		return;*/
-	
+
 	if(!bHasAimSyncData) {
 		m_bStoreOnFootSwitch = false;
 		if(syncPacket->vecMoveSpeed.Length() < 0.75) {
 			SetTargetPosition(syncPacket->vecPos, TICK_RATE*2);
 			SetCurrentSyncHeading(syncPacket->fHeading);
-			
+
 			if(m_iOldMoveStyle != 0) {
 				unsigned int uiPlayerIndex = GetScriptingHandle();
 				DWORD dwAddress = (CGame::GetBase() + 0x8067A0);
@@ -204,8 +204,8 @@ void CRemotePlayer::StoreOnFootSync(OnFootSyncData * syncPacket, bool bHasAimSyn
 	if(GetAmmo(uiWeapon) != uiAmmo) {
 		// Set our ammo
 		SetAmmo(uiWeapon, uiAmmo);
-	}	
-	m_stateType = STATE_TYPE_ONFOOT;				
+	}
+	m_stateType = STATE_TYPE_ONFOOT;
 }
 
 void CRemotePlayer::StoreInVehicleSync(EntityId vehicleId, InVehicleSyncData * syncPacket)
@@ -254,7 +254,7 @@ void CRemotePlayer::StoreInVehicleSync(EntityId vehicleId, InVehicleSyncData * s
 
 		// Set their quaternion
 		//pVehicle->SetQuaternion(syncPacket->fQuaternion);
-		
+
 		// Check if we have no bike(otherwise -> shake shake, shake shake shake IT! :P)
 		if(pVehicle->GetVehicleModelType() < 105 || pVehicle->GetVehicleModelType() > 111)
 		{
@@ -294,7 +294,7 @@ void CRemotePlayer::StoreInVehicleSync(EntityId vehicleId, InVehicleSyncData * s
 		// Set their vehicles siren state
 		if(pVehicle->GetSirenState() != syncPacket->bSirenState)
 			pVehicle->SetSirenState(syncPacket->bSirenState);
-		
+
 		// Set their windows
 		for(int i = 0; i <= 3; i++)
 			pVehicle->SetWindowState(i, syncPacket->bWindow[i]);

@@ -16,12 +16,12 @@
 
 extern CClient * g_pClient;
 
-CAudio::CAudio(String strStreamName, bool bReplay, bool bIsOnlineStream, bool bIsGameFile) : 
-			   m_strStreamName(strStreamName), m_bReplay(bReplay), m_bIsOnlineStream(bIsOnlineStream), 
+CAudio::CAudio(String strStreamName, bool bReplay, bool bIsOnlineStream, bool bIsGameFile) :
+			   m_strStreamName(strStreamName), m_bReplay(bReplay), m_bIsOnlineStream(bIsOnlineStream),
 			   m_bIsGameFile(bIsGameFile), m_bUsePosition(false), m_fRange(0.0f), m_fVolume(100.0f),
 			   m_bIsMuted(false), m_dwChannel(0)
 {
-	
+
 }
 
 CAudio::~CAudio()
@@ -224,14 +224,14 @@ int CAudio::GetLength()
 {
 	if (m_bIsOnlineStream)
 		return -1;
-	
+
 	if (m_dwChannel)
 	{
 		// get the length
-		long length = BASS_ChannelGetLength (m_dwChannel, BASS_POS_BYTE);
-		
+		QWORD length = BASS_ChannelGetLength (m_dwChannel, BASS_POS_BYTE);
+
 		// convert it into seconds and return it
-		return BASS_ChannelBytes2Seconds(m_dwChannel, length);
+		return static_cast<int>(BASS_ChannelBytes2Seconds(m_dwChannel, length));
 	}
 	return -1;
 }
@@ -243,23 +243,22 @@ bool CAudio::SetAt (int time)
 
 	if (m_dwChannel)
 	{
-		long lTime =BASS_ChannelSeconds2Bytes (m_dwChannel, time);
+		QWORD lTime = BASS_ChannelSeconds2Bytes (m_dwChannel, time);
 		BASS_ChannelSetPosition(m_dwChannel, lTime, BASS_POS_BYTE);
 		return true;
 	}
 	return false;
-}	
+}
 
 int CAudio::GetAt ()
 {
-	
 	if (m_bIsOnlineStream)
 		return -1;
 
 	if (m_dwChannel)
 	{
-		long length = BASS_ChannelGetPosition(m_dwChannel, BASS_POS_BYTE);
-		return BASS_ChannelBytes2Seconds (m_dwChannel, length);
+		QWORD length = BASS_ChannelGetPosition(m_dwChannel, BASS_POS_BYTE);
+		return static_cast<int>(BASS_ChannelBytes2Seconds (m_dwChannel, length));
 	}
 	return -1;
 }

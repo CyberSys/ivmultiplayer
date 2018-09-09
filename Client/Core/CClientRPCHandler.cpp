@@ -230,7 +230,7 @@ void CClientRPCHandler::NewVehicle(CBitStream * pBitStream, CPlayerSocket * pSen
 	// Read the horn duration
 	int iHornDuration;
 	pBitStream->Read(iHornDuration);
-	
+
 	// Read the siren state flag
 	bool bSirenState = pBitStream->ReadBit();
 
@@ -256,7 +256,7 @@ void CClientRPCHandler::NewVehicle(CBitStream * pBitStream, CPlayerSocket * pSen
 	bool bWindow[4];
 	for(int i = 0; i <= 3; i++)
 		pBitStream->Read(bWindow[i]);
-	
+
 	// Read if taxilight is turned on
 	bool bTaxiLight;
 	pBitStream->Read(bTaxiLight);
@@ -272,7 +272,7 @@ void CClientRPCHandler::NewVehicle(CBitStream * pBitStream, CPlayerSocket * pSen
 
 	// Create the new vehicle
 	CNetworkVehicle * pVehicle = new CNetworkVehicle(g_pClient->GetModelManager()->VehicleIdToModelHash(iModelId), iModelId);
-	
+
 	// Set the vehicle spawn position
 	pVehicle->SetSpawnPosition(vecPosition);
 
@@ -327,7 +327,7 @@ void CClientRPCHandler::NewVehicle(CBitStream * pBitStream, CPlayerSocket * pSen
 
 	// Set the engine status
 	pVehicle->SetEngineState(bEngineStatus);
-	
+
 	// Set the lights
 	pVehicle->SetLightsState(bLights);
 
@@ -551,7 +551,7 @@ void CClientRPCHandler::AttachObject(CBitStream * pBitStream, CPlayerSocket * pS
 					}
 				}
 			}
-		}	
+		}
 	}
 }
 
@@ -572,7 +572,7 @@ void CClientRPCHandler::DeleteObject(CBitStream * pBitStream, CPlayerSocket * pS
 	if(pObject)
 	{
 		// Is the object attached?
-		if(pObject->IsAttached()) 
+		if(pObject->IsAttached())
 			Scripting::DetachObject(pObject->GetHandle(), true);
 
 		// Delete the object from the object manager
@@ -676,7 +676,7 @@ void CClientRPCHandler::NewBlip(CBitStream * pBitStream, CPlayerSocket * pSender
 		//Read if it's a route Blip
 		pBitStream->Read(bRouteBlip);
 
-		// Read if it's shown 
+		// Read if it's shown
 		pBitStream->Read(bShow);
 
 		// Read the name
@@ -692,7 +692,7 @@ void CClientRPCHandler::NewBlip(CBitStream * pBitStream, CPlayerSocket * pSender
 		pBlipManager->ToggleRouteBlip(blipId, bRouteBlip);
 		pBlipManager->Show(blipId, bShow);
 		pBlipManager->SetName(blipId, strName);
-		pBlipManager->SetColor(blipId, uiColor); 
+		pBlipManager->SetColor(blipId, uiColor);
 	}
 }
 
@@ -977,7 +977,7 @@ void CClientRPCHandler::PlayerSpawn(CBitStream * pBitStream, CPlayerSocket * pSe
 
 			// Hacky hacky hacky xD
 			pPlayer->RemoveFromWorld();
-			Sleep(50); 
+			Sleep(50);
 			pPlayer->AddToWorld();
 
 			// Reset health to 200(IV Health + 100), otherwise player is "dead"
@@ -990,7 +990,7 @@ void CClientRPCHandler::PlayerSpawn(CBitStream * pBitStream, CPlayerSocket * pSe
 			// ViruZz: Why are we setting a player model that wasn't even set yet?
 			pPlayerManager->Spawn(playerId, iModelId, vecSpawnPos, fHeading);
 
-			// Float: What's the point of this code? 
+			// Float: What's the point of this code?
 			/*DWORD dwModelHash = SkinIdToModelHash(iModelId);
 			if(pPlayer)
 			{
@@ -1127,7 +1127,7 @@ void CClientRPCHandler::OnFootSync(CBitStream * pBitStream, CPlayerSocket * pSen
 			{
 				// Set the Helmet
 				pPlayer->SetHelmet(bHelmet);
-																
+
 				// Store aimdata before updating foot stuff, otherwise the hitbox has moved
 				// jenksta: what??
 				if(bHasAimSyncData)
@@ -1217,7 +1217,7 @@ void CClientRPCHandler::PassengerSync(CBitStream * pBitStream, CPlayerSocket * p
 
 	if(pPlayer && pPlayer->IsSpawned())
 	{
-		
+
 		if(!pPlayer->IsLocalPlayer()) {
 			pPlayer->SetPing(usPing);
 			CRemotePlayer * pRemotePlayer = reinterpret_cast<CRemotePlayer *>(pPlayer);
@@ -1316,7 +1316,7 @@ void CClientRPCHandler::ConnectionRefused(CBitStream * pBitStream, CPlayerSocket
 
 	// Determine the refuse reason
 	String strReason = "Connection refused";
- 
+
  	if(iReason == REFUSE_REASON_INVALID_VERSION)
 		strReason = "You are using an invalid version.";
  	else if(iReason == REFUSE_REASON_NAME_INVALID)
@@ -1325,7 +1325,7 @@ void CClientRPCHandler::ConnectionRefused(CBitStream * pBitStream, CPlayerSocket
 		strReason = "Your name is already in use.";
  	else if(iReason == REFUSE_REASON_ABORTED_BY_SCRIPT)
 		strReason = "Connection aborted by script.";
- 
+
  	// Disconnect from the server & show the message
  	g_pClient->GetNetworkManager()->Disconnect();
 	g_pClient->GetMainMenu()->ShowMessageBox(strReason.C_String(),"Connection failed", true, true, false);
@@ -1409,7 +1409,7 @@ void CClientRPCHandler::VehicleEnterExit(CBitStream * pBitStream, CPlayerSocket 
 		{
 			CLogFile::Printf("VehicleEntryCancelled(%d, %d)", playerId, vehicleId);
 
-			// If they are already in the vehicle, remove them, 
+			// If they are already in the vehicle, remove them,
 			// if not cancel their vehicle entry task
 			pPlayer->ResetVehicleEnterExit();
 		}
@@ -1478,7 +1478,7 @@ void CClientRPCHandler::NewFile(CBitStream * pBitStream, CPlayerSocket * pSender
 	if(!pBitStream)
 		return;
 
-	
+
 	bool bIsScript;
 	String strFileName;
 	CFileChecksum fileChecksum;
@@ -2900,7 +2900,7 @@ void CClientRPCHandler::ScriptingForceActorAnimation(CBitStream * pBitStream, CP
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
-	
+
 	EntityId actorId;
 	String strGroup;
 	String strAnim;
@@ -2921,7 +2921,7 @@ void CClientRPCHandler::ScriptingBlockWeaponScroll(CBitStream * pBitStream, CPla
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
-	
+
 	bool bToggle;
 	pBitStream->Read(bToggle);
 
@@ -2933,7 +2933,7 @@ void CClientRPCHandler::ScriptingBlockWeaponDrop(CBitStream * pBitStream, CPlaye
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
-	
+
 	bool bToggle;
 	pBitStream->Read(bToggle);
 
@@ -2945,7 +2945,7 @@ void CClientRPCHandler::ScriptingFadeScreenIn(CBitStream * pBitStream, CPlayerSo
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
-	
+
 	int iDuration;
 	pBitStream->Read(iDuration);
 
@@ -2957,7 +2957,7 @@ void CClientRPCHandler::ScriptingFadeScreenOut(CBitStream * pBitStream, CPlayerS
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
-	
+
 	int iDuration;
 	pBitStream->Read(iDuration);
 
@@ -2969,7 +2969,7 @@ void CClientRPCHandler::ScriptingPlayPoliceReport(CBitStream * pBitStream, CPlay
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
-	
+
 	String strReport;
 	pBitStream->Read(strReport);
 
@@ -2981,7 +2981,7 @@ void CClientRPCHandler::ScriptingPlayMissionCompleteAudio(CBitStream * pBitStrea
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
-	
+
 	int iMission;
 	pBitStream->Read(iMission);
 
@@ -2993,7 +2993,7 @@ void CClientRPCHandler::ScriptingPlayGameAudio(CBitStream * pBitStream, CPlayerS
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
-	
+
 	String strMusic;
 	pBitStream->Read(strMusic);
 
@@ -3129,8 +3129,8 @@ void CClientRPCHandler::ScriptingSetVehicleFollowOffset(CBitStream * pBitStream,
 		Scripting::SetFollowVehicleCamOffset(pVehicle->GetScriptingHandle(), vecPos.fX, vecPos.fY, vecPos.fZ);
 }
 
-void CClientRPCHandler::ScriptingSetAmmoInClip(CBitStream * pBitStream, CPlayerSocket * senderSocket)	
-{	
+void CClientRPCHandler::ScriptingSetAmmoInClip(CBitStream * pBitStream, CPlayerSocket * senderSocket)
+{
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
@@ -3141,8 +3141,8 @@ void CClientRPCHandler::ScriptingSetAmmoInClip(CBitStream * pBitStream, CPlayerS
 	g_pClient->GetLocalPlayer()->SetAmmoInClip(uiAmmoInClip);
 }
 
-void CClientRPCHandler::ScriptingSetAmmo(CBitStream * pBitStream, CPlayerSocket * senderSocket)	
-{	
+void CClientRPCHandler::ScriptingSetAmmo(CBitStream * pBitStream, CPlayerSocket * senderSocket)
+{
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
@@ -3154,8 +3154,8 @@ void CClientRPCHandler::ScriptingSetAmmo(CBitStream * pBitStream, CPlayerSocket 
 	g_pClient->GetLocalPlayer()->SetAmmo(uiWeapon, uiAmmo);
 }
 
-void CClientRPCHandler::ScriptingCreatePlayerBlip(CBitStream * pBitStream, CPlayerSocket * senderSocket)	
-{	
+void CClientRPCHandler::ScriptingCreatePlayerBlip(CBitStream * pBitStream, CPlayerSocket * senderSocket)
+{
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
@@ -3187,8 +3187,8 @@ void CClientRPCHandler::ScriptingCreatePlayerBlip(CBitStream * pBitStream, CPlay
 	}
 }
 
-void CClientRPCHandler::ScriptingRemovePlayerBlip(CBitStream * pBitStream, CPlayerSocket * senderSocket)	
-{	
+void CClientRPCHandler::ScriptingRemovePlayerBlip(CBitStream * pBitStream, CPlayerSocket * senderSocket)
+{
 	// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
@@ -3210,8 +3210,8 @@ void CClientRPCHandler::ScriptingRemovePlayerBlip(CBitStream * pBitStream, CPlay
 	}
 }
 
-void CClientRPCHandler::ScriptingChangePlayerBlip(CBitStream * pBitStream, CPlayerSocket * senderSocket)	
-{	
+void CClientRPCHandler::ScriptingChangePlayerBlip(CBitStream * pBitStream, CPlayerSocket * senderSocket)
+{
 		// Ensure we have a valid bit stream
 	if(!pBitStream)
 		return;
@@ -3394,7 +3394,7 @@ void CClientRPCHandler::ScriptingMarkVehicleAsActorVehicle(CBitStream * pBitStre
 
 	EntityId vehicleId;
 	pBitStream->Read(vehicleId);
-	
+
 	bool bToggle;
 	pBitStream->Read(bToggle);
 
@@ -3471,30 +3471,33 @@ void CClientRPCHandler::ScriptingSetPlayerDimension(CBitStream * pBitStream, CPl
 	if(!pBitStream)
 		return;
 
-	EntityId iModelId;
 	EntityId playerId;
-	SQInteger Dimension;
-	
-	pBitStream->Read(iModelId);
+	DimensionId Dimension;
+
 	pBitStream->Read(playerId);
 	pBitStream->Read(Dimension);
 
-	CNetworkVehicle * pVehicle = g_pClient->GetVehicleManager()->Get(iModelId);
+	CNetworkPlayer * pPlayer = g_pClient->GetPlayerManager()->GetAt(playerId);
+	if(pPlayer)
+		pPlayer->SetDimension(Dimension);
+}
 
-	if(pVehicle) {// If the player is in any vehicle
-		if(pVehicle)
-			pVehicle->SetDimension(Dimension);
 
-		g_pClient->GetStreamer()->Pulse();
-	} else { // The player is on foot
+void CClientRPCHandler::ScriptingSetVehicleDimension(CBitStream * pBitStream, CPlayerSocket * pSenderSocket)
+{
+	if (!pBitStream)
+		return;
 
-		CNetworkPlayer * pPlayer = g_pClient->GetPlayerManager()->GetAt(playerId);
+	EntityId vehicleId;
+	DimensionId Dimension;
 
-		if(pPlayer)
-			pPlayer->SetDimension(Dimension);
+	pBitStream->Read(vehicleId);
+	pBitStream->Read(Dimension);
 
-		g_pClient->GetStreamer()->Pulse();
-	}	
+	CNetworkVehicle * pVehicle = g_pClient->GetVehicleManager()->Get(vehicleId);
+	if (pVehicle) {
+		pVehicle->SetDimension(Dimension);
+	}
 }
 
 void CClientRPCHandler::ResetVehicleEnterExit(CBitStream * pBitStream, CPlayerSocket * pSenderSocket)
@@ -3534,7 +3537,7 @@ void CClientRPCHandler::ScriptingTogglePlayerLabelForPlayer(CBitStream * pBitStr
 			char green = (pPlayer->GetColor() & 0x00FF0000) >> 16;
 			char blue = (pPlayer->GetColor() & 0x0000FF00) >> 8;
 			char alpha = (pPlayer->GetColor() & 0x000000FF);
-					
+
 			Scripting::GivePedFakeNetworkName(pPlayer->GetColor(), pPlayer->GetName().C_String(),red,green,blue,alpha);
 		}*/
 	}
@@ -3544,7 +3547,7 @@ void CClientRPCHandler::ScriptingFixVehicle(CBitStream * pBitStream, CPlayerSock
 {
 	if(!pBitStream)
 		return;
-	
+
 	EntityId vehicleId;
 	pBitStream->Read(vehicleId);
 
@@ -3595,7 +3598,7 @@ void CClientRPCHandler::ScriptingRotateObject(CBitStream * pBitStream, CPlayerSo
 	CVector3 vecMoveRotation;
 	int iTime;
 
-	pBitStream->ReadCompressed(objectId);	
+	pBitStream->ReadCompressed(objectId);
 	pBitStream->Read(vecMoveRotation);
 	pBitStream->Read(iTime);
 
@@ -3661,7 +3664,7 @@ void CClientRPCHandler::ScriptingExplodeCar(CBitStream * pBitStream, CPlayerSock
 {
 	if(!pBitStream)
 		return;
-	
+
 	EntityId vehicleId;
 	pBitStream->Read(vehicleId);
 
@@ -3680,7 +3683,7 @@ void CClientRPCHandler::New3DLabel(CBitStream * pBitStream, CPlayerSocket * pSen
 		bsSend.Write(m_Labels[i]->GetColor());
 		bsSend.Write(m_Labels[i]->GetStreamingDistance());
 		bsSend.Write(m_Labels[i]->GetDimension());
-		bsSend.WriteBit(m_Labels[i]->IsVisible()); 
+		bsSend.WriteBit(m_Labels[i]->IsVisible());
 	*/
 	if(!pBitStream)
 		return;
@@ -3765,7 +3768,7 @@ void CClientRPCHandler::ScriptingSet3DLabelColor(CBitStream * pBitStream, CPlaye
 	pBitStream->Read(dwColor);
 
 	C3DLabel * pLabel = g_pClient->Get3DLabelManager()->GetAt(labelId);
-	
+
 	if(pLabel)
 		pLabel->SetColor(dwColor);
 }
@@ -3997,6 +4000,7 @@ void CClientRPCHandler::Register()
 	AddFunction(RPC_ScriptingSet3DLabelVisible, ScriptingSet3DLabelVisible);
 	AddFunction(RPC_ScriptingSet3DLabelStreamingDistance, ScriptingSet3DLabelStreamingDistance);
 	AddFunction(RPC_ScriptingSet3DLabelDimension, ScriptingSet3DLabelDimension);
+	AddFunction(RPC_ScriptingSetVehicleDimension, ScriptingSetVehicleDimension);
 }
 
 void CClientRPCHandler::Unregister()
@@ -4170,4 +4174,5 @@ void CClientRPCHandler::Unregister()
 	RemoveFunction(RPC_ScriptingSet3DLabelVisible);
 	RemoveFunction(RPC_New3DLabel);
 	RemoveFunction(RPC_Delete3DLabel);
+	RemoveFunction(RPC_ScriptingSetVehicleDimension);
 }

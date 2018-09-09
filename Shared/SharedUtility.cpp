@@ -87,7 +87,7 @@ namespace SharedUtility
 		static char szAppPath[MAX_PATH];
 #ifdef WIN32
 		HMODULE hModuleHandle;
-		GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, 
+		GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
 			(LPCSTR)&nDummy, &hModuleHandle);
 		GetModuleFileName(hModuleHandle, szAppPath, MAX_PATH);
 #else
@@ -206,7 +206,7 @@ namespace SharedUtility
 		}
 
 		// Free the allocated block of memory inside the target process
-		VirtualFreeEx(hProcess, pRemoteLibraryPath, sizeof(pRemoteLibraryPath), MEM_RELEASE);
+		VirtualFreeEx(hProcess, pRemoteLibraryPath, sLibraryPathLen, MEM_RELEASE);
 		return iReturn;
 	}
 
@@ -261,7 +261,7 @@ namespace SharedUtility
 		}
 
 		// Close the snapshot handle
-		CloseHandle(hProcessSnapShot); 
+		CloseHandle(hProcessSnapShot);
 		return bReturn;
 	}
 
@@ -471,7 +471,7 @@ namespace SharedUtility
 	int CreateDirectory(const char * szPath)
 	{
 		// Create the directory
-		int 
+		int
 #ifdef WIN32
 			iReturn = mkdir(szPath);
 #else
@@ -583,7 +583,7 @@ namespace SharedUtility
 		unsigned int uiFound = 0;
 
 		// Loop until we have no illegal characters left
-		do 
+		do
 		{
 			// test/../blah/./ah.txt -> test/blah/./ah.txt
 			uiFound = strFileName.Substitute("../", "");

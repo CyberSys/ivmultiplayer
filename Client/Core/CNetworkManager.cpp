@@ -24,7 +24,8 @@ CNetworkManager::CNetworkManager()
 	m_pClientPacketHandler(new CClientPacketHandler()),
 	m_pClientRPCHandler(new CClientRPCHandler()),
 	m_bJoinedServer(false),
-	m_bJoinedGame(false)
+	m_bJoinedGame(false),
+	m_iMaxPlayers(0)
 {
 	// Set our instance
 	m_pInstance = this;
@@ -90,7 +91,7 @@ void CNetworkManager::PacketHandler(CPacket * pPacket)
 		return;
 
 	// Pass it to the packet handler, if that doesn't handle it, pass it to the rpc handler
-	if(!pInstance->m_pClientPacketHandler->HandlePacket(pPacket) && !pInstance->m_pClientRPCHandler->HandlePacket(pPacket)) 
+	if(!pInstance->m_pClientPacketHandler->HandlePacket(pPacket) && !pInstance->m_pClientRPCHandler->HandlePacket(pPacket))
 	{
 		if(g_pClient->GetChatWindow())
 		{
@@ -106,7 +107,7 @@ void CNetworkManager::PacketHandler(CPacket * pPacket)
 			}
 			else
 				g_pClient->GetChatWindow()->AddNetworkMessage("[NETWORK] Unhandled packet (Type: %d)", pPacket->packetId);
-		} 
+		}
 	}
 }
 

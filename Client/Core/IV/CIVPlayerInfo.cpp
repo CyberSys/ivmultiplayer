@@ -44,7 +44,7 @@ CIVPlayerInfo::CIVPlayerInfo(BYTE bytePlayerNumber)
 	*(DWORD *)(pPlayerInfo + 0x15D) = 0;
 	*(DWORD *)(pPlayerInfo + 0x15B) = 0;
 	*(DWORD *)(pPlayerInfo + 0x137) = 2;
-	
+
 	m_pPlayerInfo = pPlayerInfo;
 }
 
@@ -179,7 +179,7 @@ DWORD CIVPlayerInfo::GetColour()
 	CLogFile::Printf(__FUNCSIG__);
 #endif
 	if(m_pPlayerInfo)
-		m_pPlayerInfo->m_dwColour;
+		return m_pPlayerInfo->m_dwColour;
 
 	return 0;
 }

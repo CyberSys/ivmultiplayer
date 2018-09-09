@@ -30,11 +30,11 @@ private:
 
 public:
 	CRemotePlayer();
-	~CRemotePlayer();	
+	~CRemotePlayer();
 
 	bool         Spawn(int iModelId, CVector3 vecSpawnPos, float fSpawnHeading, bool bDontRecreate = false);
 	void         Destroy();
-	void         Kill();
+	void         Kill(bool bInstantly = false) override;
 	void         Init();
 
 	void         StoreOnFootSync(OnFootSyncData * syncPacket, bool bHasAimSyncData);

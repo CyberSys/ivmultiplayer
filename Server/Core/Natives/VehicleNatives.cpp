@@ -137,9 +137,9 @@ SQInteger CVehicleNatives::Create(SQVM * pVM)
 		sq_pushinteger(pVM, INVALID_ENTITY_ID);
 		return 1;
 	}
-	
+
 	sq_getvector3(pVM, 3, &vecPosition); // 3.4.5
-	
+
 	if(sq_gettop(pVM) >= 8)
 	{
 		sq_getvector3(pVM, 6, &vecRotation); // 6.7.8
@@ -193,7 +193,7 @@ SQInteger CVehicleNatives::SetCoordinates(SQVM * pVM)
 	if(g_pVehicleManager->DoesExist(vehicleid))
 	{
 		CVehicle * pVehicle = g_pVehicleManager->GetAt(vehicleid);
-		
+
 		if(pVehicle)
 		{
 			pVehicle->SetPosition(CVector3(x, y, z));
@@ -867,16 +867,16 @@ SQInteger CVehicleNatives::SetComponent(SQVM * pVM)
 {
 	EntityId vehicleId;
 	sq_getentity(pVM, 2, &vehicleId);
-	
+
 	CVehicle * pVehicle = g_pVehicleManager->GetAt(vehicleId);
-	
+
 	if(pVehicle)
 	{
 		SQInteger iSlot;
 		SQBool bOn;
 		sq_getinteger(pVM, 3, &iSlot);
 		sq_getbool(pVM, 4, &bOn);
-		
+
 		if(iSlot >= 0 && iSlot <= 8)
 		{
 			pVehicle->SetComponentState((unsigned char)iSlot, bOn != 0);
@@ -893,9 +893,9 @@ SQInteger CVehicleNatives::ResetComponents(SQVM * pVM)
 {
 	EntityId vehicleId;
 	sq_getentity(pVM, 2, &vehicleId);
-	
+
 	CVehicle * pVehicle = g_pVehicleManager->GetAt(vehicleId);
-	
+
 	if(pVehicle)
 	{
 		pVehicle->ResetComponents();
@@ -911,9 +911,9 @@ SQInteger CVehicleNatives::GetComponents(SQVM * pVM)
 {
 	EntityId vehicleId;
 	sq_getentity(pVM, 2, &vehicleId);
-	
+
 	CVehicle * pVehicle = g_pVehicleManager->GetAt(vehicleId);
-	
+
 	if(pVehicle)
 	{
 		sq_newarray(pVM, 0);
@@ -956,9 +956,9 @@ SQInteger CVehicleNatives::GetVariation(SQVM * pVM)
 {
 	EntityId vehicleId;
 	sq_getentity(pVM, 2, &vehicleId);
-	
+
 	CVehicle * pVehicle = g_pVehicleManager->GetAt(vehicleId);
-	
+
 	if(pVehicle)
 	{
 		sq_pushinteger(pVM, pVehicle->GetVariation());
@@ -996,9 +996,9 @@ SQInteger CVehicleNatives::GetEngineStatus(SQVM * pVM)
 {
 	EntityId vehicleId;
 	sq_getentity(pVM, -1, &vehicleId);
-	
+
 	CVehicle * pVehicle = g_pVehicleManager->GetAt(vehicleId);
-	
+
 	if(pVehicle)
 	{
 		sq_pushbool(pVM, pVehicle->GetEngineStatus());
@@ -1018,7 +1018,7 @@ SQInteger CVehicleNatives::SwitchTaxiLights(SQVM *pVM)
 	sq_getbool(pVM, -1, &check);
 
 	CVehicle * pVehicle = g_pVehicleManager->GetAt(vehicleId);
-	
+
 	if(pVehicle)
 	{
 		bool bToggle = (check != 0);
@@ -1044,10 +1044,10 @@ SQInteger CVehicleNatives::ControlCar(SQVM *pVM)
 	sq_getbool(pVM,-2,&bDoor);
 
 	float fAngle;
-	sq_getfloat(pVM,-1,&fAngle); 
+	sq_getfloat(pVM,-1,&fAngle);
 
 	CVehicle * pVehicle = g_pVehicleManager->GetAt(vehicleId);
-	
+
 	if(pVehicle)
 	{
 		bool bToggle = (bDoor != 0);
@@ -1261,7 +1261,7 @@ SQInteger CVehicleNatives::SetDimension(SQVM * pVM)
 
 	sq_getinteger(pVM, -1, &iDimension);
 	sq_getentity(pVM, -2, &playerId);
-	
+
 	CVehicle* pVehicle = g_pVehicleManager->GetAt(playerId);
 	if(pVehicle == NULL) {
 		sq_pushbool(pVM, false);
@@ -1270,19 +1270,13 @@ SQInteger CVehicleNatives::SetDimension(SQVM * pVM)
 	}
 
 	pVehicle->SetDimension(iDimension);
-	CBitStream bsSend;
-	bsSend.Write(playerId);
-	bsSend.Write(iDimension);
-
-	//CLogFile::Printf("Set dimension of player(%i) to %i", (int)playerId, iDimension);
-	g_pNetworkManager->RPC(RPC_ScriptingSetPlayerDimension, &bsSend, PRIORITY_HIGH, RELIABILITY_RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
 	sq_pushbool(pVM, true);
 	return 1;
 }
 
 // getVehicleDimension(vehicleid)
 SQInteger CVehicleNatives::GetDimension(SQVM * pVM)
-{ 
+{
 	EntityId vehicleId;
 
 	sq_getentity(pVM, -1, &vehicleId);

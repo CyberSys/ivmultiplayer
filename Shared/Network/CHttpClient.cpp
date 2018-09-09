@@ -216,8 +216,8 @@ bool CHttpClient::Get(String strPath)
 				  "User-Agent: %s\r\n" \
 				  "Referer: %s\r\n" \
 				  "Connection: close\r\n" \
-				  "\r\n", 
-				  strPath.Get(), m_strHost.Get(), 
+				  "\r\n",
+				  strPath.Get(), m_strHost.Get(),
 				  m_strUserAgent.Get(), m_strReferer.Get());
 
 	// Send the GET command
@@ -258,7 +258,7 @@ void CHttpClient::SendReport(String strPath, String strReport)
 				  "Connection: close\r\n" \
 				  "\n%s" \
 				  "\r\n",
-				  strPath.Get(), m_strHost.Get(), 
+				  strPath.Get(), m_strHost.Get(),
 				  m_strUserAgent.Get(), m_strReferer.Get(), strReport.Get());
 
 	// Send the GET command
@@ -299,8 +299,8 @@ bool CHttpClient::Post(bool bHasResponse, String strPath, String strData, String
 				  "Content-Length: %d\r\n" \
 				  "Connection: close\r\n" \
 				  "\r\n" \
-				  "%s", 
-				  strPath.Get(), m_strHost.Get(), m_strUserAgent.Get(), 
+				  "%s",
+				  strPath.Get(), m_strHost.Get(), m_strUserAgent.Get(),
 				  m_strReferer.Get(), strContentType.Get(), strData.GetLength(),
 				  strData.Get());
 
@@ -326,7 +326,7 @@ bool CHttpClient::Post(bool bHasResponse, String strPath, String strData, String
 		Disconnect();
 	}
 
-	return true;	
+	return true;
 }
 
 // find s2 in s1 (with size s1_s) starting from index sp and ending at s1_s or first instance of ts

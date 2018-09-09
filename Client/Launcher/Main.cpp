@@ -30,8 +30,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// Update
 		SharedUtility::WriteRegistryString(HKEY_CLASSES_ROOT,"ivmp","","IVMultiplayer",strlen("IVMultiplayer"));
 		SharedUtility::WriteRegistryString(HKEY_CLASSES_ROOT,"ivmultiplayer","","IVMultiplayer",strlen("IVMultiplayer"));
-		
-		String strcommand = String("\"%s\" \"%%1\"",SharedUtility::GetAbsolutePath("Client.Launcher.exe"));
+
+		String strcommand("\"%s\" \"%%1\"",SharedUtility::GetAbsolutePath("Client.Launcher.exe").C_String());
 
 		SharedUtility::WriteRegistryString(HKEY_CLASSES_ROOT,"ivmp","Url Protocol","",0);
 		SharedUtility::WriteRegistryString(HKEY_CLASSES_ROOT,"ivmp\\shell\\open\\command\\","",strcommand.GetData(),strcommand.GetLength());
@@ -43,15 +43,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	// TODO: Steam registry entry support
-	if(!SharedUtility::ReadRegistryString(HKEY_LOCAL_MACHINE, "Software\\Rockstar Games\\Grand Theft Auto IV", 
-		"InstallFolder", NULL, szInstallDirectory, sizeof(szInstallDirectory)) || 
+	if(!SharedUtility::ReadRegistryString(HKEY_LOCAL_MACHINE, "Software\\Rockstar Games\\Grand Theft Auto IV",
+		"InstallFolder", NULL, szInstallDirectory, sizeof(szInstallDirectory)) ||
 		!SharedUtility::Exists(szInstallDirectory))
 	{
-		if(!SharedUtility::ReadRegistryString(HKEY_CURRENT_USER, "Software\\IVMP", "gtaivdir", NULL, 
-			szInstallDirectory, sizeof(szInstallDirectory)) || 
+		if(!SharedUtility::ReadRegistryString(HKEY_CURRENT_USER, "Software\\IVMP", "gtaivdir", NULL,
+			szInstallDirectory, sizeof(szInstallDirectory)) ||
 			!SharedUtility::Exists(szInstallDirectory))
 		{
-			if(ShowMessageBox("Failed to retrieve GTA IV install directory from registry. Specify your GTA IV path now?", 
+			if(ShowMessageBox("Failed to retrieve GTA IV install directory from registry. Specify your GTA IV path now?",
 				(MB_ICONEXCLAMATION | MB_OKCANCEL)) == IDOK)
 			{
 				// Taken from http://vcfaq.mvps.org/sdk/20.htm
@@ -116,7 +116,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ShowMessageBox("Failed to find " CLIENT_LAUNCH_HELPER_NAME DEBUG_SUFFIX LIBRARY_EXTENSION". Cannot launch IV: Multiplayer.");
 		return 1;
 	}
-	
+
 	// Check if GTAIV is already running
 	if(SharedUtility::IsProcessRunning("GTAIV.exe"))
 	{
@@ -168,7 +168,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int iOffset = 0;
 	bool bCommandFound = false;
 	String strNewCommandLine = lpCmdLine;
-	
+
 	// Check for shortcut commandline
 	if(sizetCMDFound != std::string::npos)
 	{
@@ -186,7 +186,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			 bCommandFound = true;
 		}
 	}
-	
+
 	// Check for ivmultiplayer protocol
 	if(!bCommandFound)
 	{
@@ -208,7 +208,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		std::size_t sizetCMDFound_2 = strServerInst.find(":");
 
 		// Have we an : in our instruction
-		if(sizetCMDFound_2 != std::string::npos) 
+		if(sizetCMDFound_2 != std::string::npos)
 		{
 			// Grab our connect data
 			strServer = String("%s",strServerInst.substr(0,sizetCMDFound_2).c_str());
@@ -220,7 +220,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			// Write connect data to settings xml
 			CVAR_SET_STRING("currentconnect_server",strServer.Get());
 			CVAR_SET_INTEGER("currentconnect_port",strPort.ToInteger());
-			
+
 			// Generate new commandline
 			strNewCommandLine = String("%s -directconnect", lpCmdLine);
 		}
@@ -251,7 +251,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		CVAR_SET_STRING("currentconnect_server","0.0.0.0");
 		CVAR_SET_INTEGER("currentconnect_port",9999);
 	}
-	
+
 	// Close settings...
 	CSettings::Close();
 
@@ -265,7 +265,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	memset(&piProcessInfo, 0, sizeof(piProcessInfo));
 	siStartupInfo.cb = sizeof(siStartupInfo);
 
-	if(!CreateProcess(strApplicationPath.Get(), (char *)strCommandLine.Get(), NULL, NULL, TRUE, CREATE_SUSPENDED, NULL, 
+	if(!CreateProcess(strApplicationPath.Get(), (char *)strCommandLine.Get(), NULL, NULL, TRUE, CREATE_SUSPENDED, NULL,
 		SharedUtility::GetAppPath(), &siStartupInfo, &piProcessInfo))
 	{
 		ShowMessageBox("Failed to start LaunchGTAIV.exe. Cannot launch IV: Multiplayer.");
@@ -282,7 +282,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		TerminateProcess(piProcessInfo.hProcess, 0);
 
 		// Show the error message
-		String strError("Unknown error. Cannot launch IV: Multiplayer.");
+		String strError("Unknown error - %i. Cannot launch IV: Multiplayer.", iReturn);
 
 		if(iReturn == 1)
 			strError = "Failed to write library path into remote process. Cannot launch IV: Multiplayer.";

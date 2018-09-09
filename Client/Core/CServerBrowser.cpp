@@ -104,10 +104,10 @@ void CServerBrowser::Process()
 void CServerBrowser::OnResetDevice()
 {
 	CGUI * pGUI = g_pClient->GetGUI();
-	
+
 	float fWidth = (float)pGUI->GetDisplayWidth();
 	float fHeight = (float)pGUI->GetDisplayHeight();
-	
+
 	m_GUIElements.pWindow->setPosition(CEGUI::UVector2(CEGUI::UDim(0, fWidth/2-450.0f), CEGUI::UDim(0, fHeight/2-250.0f)));
 }
 
@@ -189,8 +189,8 @@ void CServerBrowser::ServerQueryHandler(String strHost, unsigned short usPort, S
 		unsigned int iRowIndex = pMultiColumnList->addRow();
 		pMultiColumnList->setItem(new ServerBrowserListItem(strHostName.Get()), 0, iRowIndex);
 		pMultiColumnList->setItem(new ServerBrowserListItem(strHostAndPort.Get()), 1, iRowIndex);
-		char szPlayerCount[9];
-		sprintf(szPlayerCount, "%s/%s", iPlayerCount, iMaxPlayers);
+		char szPlayerCount[32] = { 0 };
+		sprintf(szPlayerCount, "%i/%i", iPlayerCount, iMaxPlayers);
 		pMultiColumnList->setItem(new ServerBrowserListItem(szPlayerCount), 2, iRowIndex);
 		pMultiColumnList->setItem(new ServerBrowserListItem("9999"), 3, iRowIndex);
 		pMultiColumnList->setItem(new ServerBrowserListItem(bPassworded ? "Yes" : "No"), 4, iRowIndex);

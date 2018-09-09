@@ -19,9 +19,6 @@
 
 extern CClient * g_pClient;
 
-#define THIS_CHECK if(!this) { if(g_pClient->GetChatWindow()) { g_pClient->GetChatWindow()->AddErrorMessage("[WARNING] Internal error occured in %s[ Func %s() ]",__FILE__,__FUNCTION__); } return; }
-#define THIS_CHECK_R(x) if(!this) { if(g_pClient->GetChatWindow()) { g_pClient->GetChatWindow()->AddErrorMessage("[WARNING] Internal error occured in %s [ Func %s() ]",__FILE__,__FUNCTION__); } return x; }
-
 CNetworkVehicle::CNetworkVehicle(DWORD dwModelHash, int iModelId)
 	: CStreamableEntity(STREAM_ENTITY_VEHICLE, 200.0f),
 	m_pVehicle(NULL),
@@ -85,7 +82,6 @@ CNetworkVehicle::~CNetworkVehicle()
 
 bool CNetworkVehicle::IsOccupied()
 {
-	THIS_CHECK_R(false);
 	// Do we have a driver?
 	if(m_pDriver)
 		return true;
@@ -109,7 +105,6 @@ void CNetworkVehicle::SetPassenger(BYTE bytePassengerId, CNetworkPlayer * pPasse
 	//if(pPassenger)
 		//CLogFile::Printf("Set Passenger %d(%s)",bytePassengerId, pPassenger->GetName().C_String());
 
-	THIS_CHECK;
 	if(bytePassengerId > MAX_VEHICLE_PASSENGERS)
 		return;
 
@@ -118,7 +113,6 @@ void CNetworkVehicle::SetPassenger(BYTE bytePassengerId, CNetworkPlayer * pPasse
 
 CNetworkPlayer * CNetworkVehicle::GetPassenger(BYTE bytePassengerId)
 {
-	THIS_CHECK_R(NULL);
 	if(bytePassengerId >= MAX_VEHICLE_PASSENGERS)
 		return NULL;
 
@@ -127,7 +121,6 @@ CNetworkPlayer * CNetworkVehicle::GetPassenger(BYTE bytePassengerId)
 
 void CNetworkVehicle::SetOccupant(BYTE byteSeatId, CNetworkPlayer * pOccupant)
 {
-	THIS_CHECK;
 	if(byteSeatId == 0)
 		SetDriver(pOccupant);
 	else
@@ -136,7 +129,6 @@ void CNetworkVehicle::SetOccupant(BYTE byteSeatId, CNetworkPlayer * pOccupant)
 
 CNetworkPlayer * CNetworkVehicle::GetOccupant(BYTE byteSeatId)
 {
-	THIS_CHECK_R(NULL);
 	if(byteSeatId == 0)
 		return GetDriver();
 
@@ -145,7 +137,6 @@ CNetworkPlayer * CNetworkVehicle::GetOccupant(BYTE byteSeatId)
 
 bool CNetworkVehicle::Create(bool bStreamIn)
 {
-	THIS_CHECK_R(false);
 	// Are we not already created?
 	if(!IsSpawned())
 	{
@@ -264,7 +255,6 @@ bool CNetworkVehicle::Create(bool bStreamIn)
 
 void CNetworkVehicle::Destroy()
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -281,7 +271,7 @@ void CNetworkVehicle::Destroy()
 
 		// Get the vehicle pointer
 		IVVehicle * pVehicle = m_pVehicle->GetVehicle();
-		
+
 		unsigned int handle = GetScriptingHandle();
 		Scripting::DeleteCar(&handle);
 
@@ -324,7 +314,6 @@ void CNetworkVehicle::Destroy()
 
 void CNetworkVehicle::StreamIn()
 {
-	THIS_CHECK;
 	if(GetDriver() == g_pClient->GetLocalPlayer())
 		CLogFile::Printf("STREAM IN ON LOCAL PLAYERS VEHICLE!");
 
@@ -421,7 +410,6 @@ void CNetworkVehicle::StreamIn()
 
 void CNetworkVehicle::StreamOut()
 {
-	THIS_CHECK;
 	if(GetDriver() == g_pClient->GetLocalPlayer())
 		CLogFile::Printf("STREAM OUT ON LOCAL PLAYERS VEHICLE!");
 
@@ -469,7 +457,6 @@ void CNetworkVehicle::StreamOut()
 
 bool CNetworkVehicle::IsMoving()
 {
-	THIS_CHECK_R(false);
 	CVector3 vecMoveSpeed;
 	GetMoveSpeed(vecMoveSpeed);
 
@@ -481,13 +468,11 @@ bool CNetworkVehicle::IsMoving()
 
 void CNetworkVehicle::StopMoving()
 {
-	THIS_CHECK;
 	SetMoveSpeed(CVector3());
 }
 
 void CNetworkVehicle::SoundHorn(int iDuration)
 {
-	THIS_CHECK;
 	if(IsSpawned())
 		m_pVehicle->SoundHorn(iDuration);
 
@@ -496,7 +481,6 @@ void CNetworkVehicle::SoundHorn(int iDuration)
 
 unsigned int CNetworkVehicle::GetScriptingHandle()
 {
-	THIS_CHECK_R(0);
 	if(IsSpawned())
 		return CGame::GetPools()->GetVehiclePool()->HandleOf(m_pVehicle->GetVehicle());
 
@@ -505,7 +489,6 @@ unsigned int CNetworkVehicle::GetScriptingHandle()
 
 void CNetworkVehicle::SetModel(DWORD dwModelHash)
 {
-	THIS_CHECK;
 	// Get the model index from the model hash
 	int iModelIndex = CGame::GetStreaming()->GetModelIndexFromHash(dwModelHash);
 
@@ -556,7 +539,6 @@ void CNetworkVehicle::SetModel(DWORD dwModelHash)
 
 void CNetworkVehicle::SetColors(BYTE byteColor1, BYTE byteColor2, BYTE byteColor3, BYTE byteColor4)
 {
-	THIS_CHECK;
 	if(IsSpawned())
 		m_pVehicle->SetColors(byteColor1, byteColor2, byteColor3, byteColor4);
 
@@ -568,7 +550,6 @@ void CNetworkVehicle::SetColors(BYTE byteColor1, BYTE byteColor2, BYTE byteColor
 
 void CNetworkVehicle::GetColors(BYTE &byteColor1, BYTE &byteColor2, BYTE &byteColor3, BYTE &byteColor4)
 {
-	THIS_CHECK;
 	if(IsSpawned())
 		m_pVehicle->GetColors(&byteColor1, &byteColor2, &byteColor3, &byteColor4);
 	else
@@ -582,7 +563,6 @@ void CNetworkVehicle::GetColors(BYTE &byteColor1, BYTE &byteColor2, BYTE &byteCo
 
 void CNetworkVehicle::SetPosition(const CVector3& vecPosition, bool bDontCancelTasks, bool bResetInterpolation)
 {
-	THIS_CHECK;
 	if(IsSpawned())
 	{
 		if(!bDontCancelTasks)
@@ -605,7 +585,6 @@ void CNetworkVehicle::SetPosition(const CVector3& vecPosition, bool bDontCancelT
 
 void CNetworkVehicle::GetPosition(CVector3& vecPosition)
 {
-	THIS_CHECK;
 	if(IsSpawned())
 		m_pVehicle->GetPosition(vecPosition);
 	else
@@ -614,7 +593,6 @@ void CNetworkVehicle::GetPosition(CVector3& vecPosition)
 
 void CNetworkVehicle::SetRotation(const CVector3& vecRotation, bool bResetInterpolation)
 {
-	THIS_CHECK;
 	if(IsSpawned())
 	{
 		m_pVehicle->GetVehicle()->Remove();
@@ -644,7 +622,6 @@ void CNetworkVehicle::SetRotation(const CVector3& vecRotation, bool bResetInterp
 
 void CNetworkVehicle::GetRotation(CVector3& vecRotation)
 {
-	THIS_CHECK;
 	if(IsSpawned())
 	{
 		// Get the vehicle matrix
@@ -671,7 +648,6 @@ void CNetworkVehicle::GetRotation(CVector3& vecRotation)
 
 void CNetworkVehicle::SetHealth(unsigned int uiHealth)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 		m_pVehicle->SetEngineHealth((float)uiHealth);
@@ -681,7 +657,6 @@ void CNetworkVehicle::SetHealth(unsigned int uiHealth)
 
 unsigned int CNetworkVehicle::GetHealth()
 {
-	THIS_CHECK_R(0);
 	// Are we spawned?
 	if(IsSpawned() && this->m_bIsStreamedIn && this->m_bActive)
 		return (unsigned int)m_pVehicle->GetEngineHealth();
@@ -691,7 +666,6 @@ unsigned int CNetworkVehicle::GetHealth()
 
 void CNetworkVehicle::SetPetrolTankHealth(float fHealth)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 		m_pVehicle->SetPetrolTankHealth((float)fHealth);
@@ -701,7 +675,6 @@ void CNetworkVehicle::SetPetrolTankHealth(float fHealth)
 
 float CNetworkVehicle::GetPetrolTankHealth()
 {
-	THIS_CHECK_R(0);
 	// Are we spawned?
 	if(IsSpawned())
 		return m_pVehicle->GetPetrolTankHealth();
@@ -723,7 +696,6 @@ void CNetworkVehicle::GetQuaternion(float * quat)
 
 void CNetworkVehicle::SetMoveSpeed(const CVector3& vecMoveSpeed)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 		m_pVehicle->SetMoveSpeed(vecMoveSpeed);
@@ -733,7 +705,6 @@ void CNetworkVehicle::SetMoveSpeed(const CVector3& vecMoveSpeed)
 
 void CNetworkVehicle::GetMoveSpeed(CVector3& vecMoveSpeed)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 		m_pVehicle->GetMoveSpeed(vecMoveSpeed);
@@ -743,7 +714,6 @@ void CNetworkVehicle::GetMoveSpeed(CVector3& vecMoveSpeed)
 
 void CNetworkVehicle::SetTurnSpeed(const CVector3& vecTurnSpeed)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 		m_pVehicle->SetTurnSpeed(vecTurnSpeed);
@@ -753,7 +723,6 @@ void CNetworkVehicle::SetTurnSpeed(const CVector3& vecTurnSpeed)
 
 void CNetworkVehicle::GetTurnSpeed(CVector3& vecTurnSpeed)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 		m_pVehicle->GetTurnSpeed(vecTurnSpeed);
@@ -763,7 +732,6 @@ void CNetworkVehicle::GetTurnSpeed(CVector3& vecTurnSpeed)
 
 void CNetworkVehicle::SetSirenState(bool bSirenState)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 		m_pVehicle->SetSirenState(bSirenState);
@@ -773,7 +741,6 @@ void CNetworkVehicle::SetSirenState(bool bSirenState)
 
 bool CNetworkVehicle::GetSirenState()
 {
-	THIS_CHECK_R(false);
 	// Are we spawned?
 	if(IsSpawned())
 		return m_pVehicle->GetSirenState();
@@ -783,7 +750,6 @@ bool CNetworkVehicle::GetSirenState()
 
 void CNetworkVehicle::SetDirtLevel(float fDirtLevel)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 		m_pVehicle->SetDirtLevel(fDirtLevel);
@@ -793,7 +759,6 @@ void CNetworkVehicle::SetDirtLevel(float fDirtLevel)
 
 float CNetworkVehicle::GetDirtLevel()
 {
-	THIS_CHECK_R(0);
 	// Are we spawned?
 	if(IsSpawned())
 		return m_pVehicle->GetDirtLevel();
@@ -804,10 +769,9 @@ float CNetworkVehicle::GetDirtLevel()
 
 bool CNetworkVehicle::StoreEmptySync(EMPTYVEHICLESYNCPACKET * emptyVehicleSync)
 {
-	THIS_CHECK_R(false);
 	if(IsSpawned() && IsStreamedIn())
 	{
-		if(m_oldEmptySyncData.bEngineStatus == GetEngineState()) 
+		if(m_oldEmptySyncData.bEngineStatus == GetEngineState())
 			if(m_oldEmptySyncData.fDirtLevel == GetDirtLevel())
 				if(m_oldEmptySyncData.fPetrolHealth == GetPetrolTankHealth())
 					if(m_oldEmptySyncData.uiHealth == GetHealth())
@@ -851,7 +815,6 @@ bool CNetworkVehicle::StoreEmptySync(EMPTYVEHICLESYNCPACKET * emptyVehicleSync)
 
 BYTE CNetworkVehicle::GetMaxPassengers()
 {
-	THIS_CHECK_R(0);
 	// Are we spawned?
 	if(IsSpawned())
 		return m_pVehicle->GetMaxPasssengers();
@@ -861,7 +824,6 @@ BYTE CNetworkVehicle::GetMaxPassengers()
 
 void CNetworkVehicle::AddToWorld()
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -872,7 +834,6 @@ void CNetworkVehicle::AddToWorld()
 
 void CNetworkVehicle::RemoveFromWorld(bool bStopMoving)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -887,7 +848,6 @@ void CNetworkVehicle::RemoveFromWorld(bool bStopMoving)
 
 void CNetworkVehicle::SetDoorLockState(DWORD dwDoorLockState)
 {
-	THIS_CHECK;
 	// Get the actual lock state
 	DWORD dwState = 0;
 
@@ -915,7 +875,6 @@ void CNetworkVehicle::SetDoorLockState(DWORD dwDoorLockState)
 
 DWORD CNetworkVehicle::GetDoorLockState()
 {
-	THIS_CHECK_R(0);
 	DWORD dwState = m_dwDoorLockState;
 
 	// Are we spawned?
@@ -931,20 +890,18 @@ DWORD CNetworkVehicle::GetDoorLockState()
 	case 7:
 		return 2;
 	default:
-		CLogFile::Printf("Unknown vehicle %d door state %d", m_vehicleId, m_pVehicle->GetDoorLockState()); 
+		CLogFile::Printf("Unknown vehicle %d door state %d", m_vehicleId, m_pVehicle->GetDoorLockState());
 	}
 	return dwState;
 }
 
 void CNetworkVehicle::Pulse()
 {
-	THIS_CHECK;
 	Interpolate();
 }
 
 void CNetworkVehicle::UpdateTargetPosition()
 {
-	THIS_CHECK;
 	// Do we have a target position?
 	if(HasTargetPosition())
 	{
@@ -996,7 +953,6 @@ void CNetworkVehicle::UpdateTargetPosition()
 
 void CNetworkVehicle::UpdateTargetRotation()
 {
-	THIS_CHECK;
 	// Do we have a target rotation?
 	if(HasTargetRotation())
 	{
@@ -1030,7 +986,6 @@ void CNetworkVehicle::UpdateTargetRotation()
 
 void CNetworkVehicle::Interpolate()
 {
-	THIS_CHECK;
 	// Do we have a driver?
 	if(GetDriver())
 	{
@@ -1061,7 +1016,6 @@ void CNetworkVehicle::Interpolate()
 void CNetworkVehicle::SetTargetPosition(const CVector3& vecPosition, unsigned long ulDelay)
 {
 	// Are we spawned?
-	THIS_CHECK;
 
 	if(IsSpawned())
 	{
@@ -1098,7 +1052,6 @@ void CNetworkVehicle::SetTargetPosition(const CVector3& vecPosition, unsigned lo
 
 void CNetworkVehicle::SetTargetRotation(const CVector3& vecRotation, unsigned long ulDelay)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -1132,19 +1085,16 @@ void CNetworkVehicle::SetTargetRotation(const CVector3& vecRotation, unsigned lo
 
 void CNetworkVehicle::RemoveTargetPosition()
 {
-	THIS_CHECK;
 	m_interp.pos.ulFinishTime = 0;
 }
 
 void CNetworkVehicle::RemoveTargetRotation()
 {
-	THIS_CHECK;
 	m_interp.rot.ulFinishTime = 0;
 }
 
 void CNetworkVehicle::ResetInterpolation()
 {
-	THIS_CHECK;
 	if(HasTargetPosition())
 		SetPosition(m_interp.pos.vecTarget, true);
 
@@ -1157,10 +1107,9 @@ void CNetworkVehicle::ResetInterpolation()
 
 void CNetworkVehicle::UpdateInterior(bool bHasDriver)
 {
-	THIS_CHECK;
 	if(!bHasDriver)
 	{
-		if(GetInterior() != m_uiInterior) 
+		if(GetInterior() != m_uiInterior)
 		{
 			SetInterior(GetInterior());
 		}
@@ -1171,11 +1120,11 @@ void CNetworkVehicle::UpdateInterior(bool bHasDriver)
 		if(pPlayer && pPlayer->IsSpawned())
 		{
 			unsigned int uiInterior = pPlayer->GetInterior();
-			if(GetInterior() == uiInterior) 
+			if(GetInterior() == uiInterior)
 			{
 				SetInterior(uiInterior);
 			}
-			else if(GetInterior() != uiInterior) 
+			else if(GetInterior() != uiInterior)
 			{
 				SetInterior(pPlayer->GetInterior());
 			}
@@ -1185,7 +1134,6 @@ void CNetworkVehicle::UpdateInterior(bool bHasDriver)
 
 void CNetworkVehicle::SetInterior(unsigned int uiInterior)
 {
-	THIS_CHECK;
 	//CLogFile::Printf("(%d)Interior - %d,%d",GetVehicleId(), GetInterior(), m_uiInterior);
 
 	// Get our local player
@@ -1203,7 +1151,6 @@ void CNetworkVehicle::SetInterior(unsigned int uiInterior)
 
 unsigned int CNetworkVehicle::GetInterior()
 {
-	THIS_CHECK_R(0);
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -1217,13 +1164,12 @@ unsigned int CNetworkVehicle::GetInterior()
 
 void CNetworkVehicle::SetIndicatorState(bool bFrontLeft, bool bFrontRight, bool bBackLeft, bool bBackRight)
 {
-	THIS_CHECK;
 
 	m_bIndicatorState[0] = bFrontLeft;
 	m_bIndicatorState[1] = bFrontRight;
 	m_bIndicatorState[2] = bBackLeft;
 	m_bIndicatorState[3] = bBackRight;
-	
+
 	if(m_pVehicle)
 	{
 		IVVehicle* pVehicle = m_pVehicle->GetVehicle();
@@ -1239,7 +1185,6 @@ void CNetworkVehicle::SetIndicatorState(bool bFrontLeft, bool bFrontRight, bool 
 
 bool CNetworkVehicle::GetIndicatorState(unsigned char ucSlot)
 {
-	THIS_CHECK_R(false);
 	if(ucSlot >= 0 && ucSlot <= 3)
 	{
 		return m_bIndicatorState[ucSlot];
@@ -1250,7 +1195,6 @@ bool CNetworkVehicle::GetIndicatorState(unsigned char ucSlot)
 
 void CNetworkVehicle::SetComponentState(unsigned char ucSlot, bool bComponent)
 {
-	THIS_CHECK;
 	if(ucSlot <= 8)
 	{
 		m_bComponents[ucSlot] = bComponent;
@@ -1263,7 +1207,6 @@ void CNetworkVehicle::SetComponentState(unsigned char ucSlot, bool bComponent)
 
 bool CNetworkVehicle::GetComponentState(unsigned char ucSlot)
 {
-	THIS_CHECK_R(false);
 	if(ucSlot <= 8)
 		return m_bComponents[ucSlot];
 
@@ -1272,7 +1215,6 @@ bool CNetworkVehicle::GetComponentState(unsigned char ucSlot)
 
 void CNetworkVehicle::SetVariation(unsigned char ucVariation)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -1291,7 +1233,6 @@ void CNetworkVehicle::SetVariation(unsigned char ucVariation)
 
 unsigned char CNetworkVehicle::GetVariation()
 {
-	THIS_CHECK_R(0);
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -1311,7 +1252,6 @@ unsigned char CNetworkVehicle::GetVariation()
 
 bool CNetworkVehicle::IsOnScreen()
 {
-	THIS_CHECK_R(false);
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -1325,7 +1265,6 @@ bool CNetworkVehicle::IsOnScreen()
 
 void CNetworkVehicle::SetTaxiLightsState(bool bState)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 		Scripting::SetTaxiLights(GetScriptingHandle(),bState);
@@ -1335,7 +1274,6 @@ void CNetworkVehicle::SetTaxiLightsState(bool bState)
 
 bool CNetworkVehicle::GetTaxiLightsState()
 {
-	THIS_CHECK_R(false);
 	// Are we spawned?
 	if(IsSpawned())
 		return m_bTaxiLights;
@@ -1345,7 +1283,6 @@ bool CNetworkVehicle::GetTaxiLightsState()
 
 void CNetworkVehicle::SetCarDoorAngle(int iDoor,bool bClose, float fAngle)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -1363,7 +1300,6 @@ void CNetworkVehicle::SetCarDoorAngle(int iDoor,bool bClose, float fAngle)
 
 float CNetworkVehicle::GetCarDoorAngle(int iDoor)
 {
-	THIS_CHECK_R(0);
 	// Are we spawned?
 	if(IsSpawned())
 		return m_fDoor[iDoor];
@@ -1373,7 +1309,6 @@ float CNetworkVehicle::GetCarDoorAngle(int iDoor)
 
 void CNetworkVehicle::SetLightsState(bool bLights)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -1388,7 +1323,6 @@ void CNetworkVehicle::SetLightsState(bool bLights)
 
 bool CNetworkVehicle::GetLightsState()
 {
-	THIS_CHECK_R(false);
 	// Are we spawned?
 	if(IsSpawned())
 		return m_bLights;
@@ -1398,7 +1332,6 @@ bool CNetworkVehicle::GetLightsState()
 
 bool CNetworkVehicle::GetWindowState(int iWindow)
 {
-	THIS_CHECK_R(false);
 	// Are we spawned?
 	if(IsSpawned())
 		return m_bWindow[iWindow];
@@ -1408,7 +1341,6 @@ bool CNetworkVehicle::GetWindowState(int iWindow)
 
 void CNetworkVehicle::SetWindowState(int iWindow, bool bBroken)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -1426,18 +1358,17 @@ void CNetworkVehicle::SetWindowState(int iWindow, bool bBroken)
 
 void CNetworkVehicle::SetDamageable(bool bToggle)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned() && m_pVehicle)
 	{
-		if(m_bActorVehicle) 
+		if(m_bActorVehicle)
 		{
 			Scripting::SetCarCanBeDamaged(GetScriptingHandle(),false);
 			Scripting::SetCarCanBurstTyres(GetScriptingHandle(),false);
 			return;
 		}
 
-		if(CGame::GetSpecialData(0)) 
+		if(CGame::GetSpecialData(0))
 		{
 			Scripting::SetCarCanBeDamaged(GetScriptingHandle(),true);
 			Scripting::SetCarCanBurstTyres(GetScriptingHandle(),true);
@@ -1461,7 +1392,6 @@ void CNetworkVehicle::SetDamageable(bool bToggle)
 
 void CNetworkVehicle::SetSteeringAngle(float fSteeringAngle)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 		m_pVehicle->SetSteeringAngle(fSteeringAngle);
@@ -1469,7 +1399,6 @@ void CNetworkVehicle::SetSteeringAngle(float fSteeringAngle)
 
 float CNetworkVehicle::GetSteeringAngle()
 {
-	THIS_CHECK_R(0);
 	// Are we spawned?
 	if(IsSpawned())
 		m_pVehicle->GetSteeringAngle();
@@ -1479,7 +1408,6 @@ float CNetworkVehicle::GetSteeringAngle()
 
 void CNetworkVehicle::SetEngineState(bool bState)
 {
-	THIS_CHECK;
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -1490,7 +1418,6 @@ void CNetworkVehicle::SetEngineState(bool bState)
 
 bool CNetworkVehicle::GetEngineState()
 {
-	THIS_CHECK_R(false);
 	// Are we spawned?
 	if(IsSpawned())
 		return m_bEngineStatus;
@@ -1500,7 +1427,6 @@ bool CNetworkVehicle::GetEngineState()
 
 CVector3 CNetworkVehicle::GetDeformation(CVector3 vecPosition)
 {
-	THIS_CHECK_R(CVector3(0.0f, 0.0f, 0.0f));
 	// Are we spawned?
 	if(IsSpawned())
 	{
@@ -1513,7 +1439,6 @@ CVector3 CNetworkVehicle::GetDeformation(CVector3 vecPosition)
 
 void CNetworkVehicle::SetVehicleGPSState(bool bState)
 {
-	THIS_CHECK;
 	if(IsSpawned())
 	{
 		m_pVehicle->SetGPSState(bState);
@@ -1523,7 +1448,6 @@ void CNetworkVehicle::SetVehicleGPSState(bool bState)
 
 bool CNetworkVehicle::GetVehicleGPSState()
 {
-	THIS_CHECK_R(false);
 	if(IsSpawned())
 		return m_pVehicle->GetGPSState();
 

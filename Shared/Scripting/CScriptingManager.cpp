@@ -221,13 +221,13 @@ private:
 		{
 			const SQChar * szError = NULL;
 			sq_getstring(pVM, 2, &szError);
-				
+
 			ErrorInfo info;
 			info.strError = szError;
 
 			SQStackInfos si;
 			SQInteger level = 1; // 1 is to skip this function that is level 0
-			const SQChar *name = 0; 
+			const SQChar *name = 0;
 			SQInteger seq = 0;
 
 			while(SQ_SUCCEEDED(sq_stackinfos(pVM, level, &si)))
@@ -864,7 +864,7 @@ CSquirrel * CScriptingManager::Load(String strName, String strPath)
 		std::list<ScriptingFunction *>::iterator iter;
 
 		for(iter = m_funcs.begin(); iter != m_funcs.end(); iter++)
-			pScript->RegisterFunction((*iter)->strName, (*iter)->pfnFunction, (*iter)->iParameterCount, 
+			pScript->RegisterFunction((*iter)->strName, (*iter)->pfnFunction, (*iter)->iParameterCount,
 			(*iter)->strTemplate);
 	}
 
@@ -934,8 +934,8 @@ CSquirrel * CScriptingManager::Load(String strName, String strPath)
 
 	if(!pScript->Execute())
 	{
-		delete pScript;
 		m_scripts.remove(pScript);
+		delete pScript;
 		CLogFile::Printf("Failed to execute script %s", strName.Get());
 		return NULL;
 	}

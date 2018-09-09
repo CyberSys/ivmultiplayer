@@ -82,19 +82,19 @@ CTrafficLights::eTrafficLightState CTrafficLights::GetState()
 
 	else if(uiTimePassed < m_uiGreenDuration + m_uiYellowDuration)
 		return TRAFFIC_LIGHT_STATE_YELLOW_RED;
-	
+
 	else if(uiTimePassed < m_uiGreenDuration + m_uiYellowDuration + m_uiRedDuration)
 		return TRAFFIC_LIGHT_STATE_RED_RED_1;
-	
+
 	else if(uiTimePassed < m_uiGreenDuration + 2 * m_uiYellowDuration + m_uiRedDuration)
 		return TRAFFIC_LIGHT_STATE_RED_TO_GREEN;
-	
+
 	else if(uiTimePassed < 2 * m_uiGreenDuration + 2 * m_uiYellowDuration + m_uiRedDuration)
 		return TRAFFIC_LIGHT_STATE_RED_GREEN;
-	
+
 	else if(uiTimePassed < 2 * m_uiGreenDuration + 3 * m_uiYellowDuration + m_uiRedDuration)
 		return TRAFFIC_LIGHT_STATE_RED_YELLOW;
-	
+
 	else if(uiTimePassed < 2 * m_uiGreenDuration + 3 * m_uiYellowDuration + 2 * m_uiRedDuration)
 		return TRAFFIC_LIGHT_STATE_RED_RED_2;
 
@@ -152,7 +152,7 @@ bool CTrafficLights::IsUsingDefaultDurations()
 	// some lights are flashing, thus only the yellow light is relevant
 	if(m_eStateSet >= TRAFFIC_LIGHT_STATE_FLASHING_FLASHING)
 		return m_uiYellowDuration == DEFAULT_YELLOW_DURATION;
-	
+
 	// Check all lights
 	return m_uiGreenDuration == DEFAULT_GREEN_DURATION && m_uiYellowDuration == DEFAULT_YELLOW_DURATION && m_uiRedDuration == DEFAULT_RED_DURATION;
 }
@@ -183,7 +183,7 @@ void CTrafficLights::SetGreenDuration(unsigned int uiDuration)
 	{
 		// save the old state
 		eTrafficLightState eState = GetState();
-		
+
 		// Update the durations
 		m_uiGreenDuration = uiDuration;
 		CalculateCycleTime();
@@ -199,7 +199,7 @@ void CTrafficLights::SetGreenDuration(unsigned int uiDuration)
 }
 
 void CTrafficLights::SetYellowDuration(unsigned int uiDuration)
-{	
+{
 	if(uiDuration > 0)
 	{
 		// save the old state

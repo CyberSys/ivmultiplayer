@@ -34,7 +34,7 @@ public:
 
 	float Length() const
 	{
-		return sqrt((fX * fX) + (fY * fY) + (fZ * fZ));
+		return sqrtf((fX * fX) + (fY * fY) + (fZ * fZ));
 	}
 
 	CVector3 operator+ (const CVector3& vecRight) const

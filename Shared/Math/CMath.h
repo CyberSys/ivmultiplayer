@@ -32,7 +32,7 @@ namespace Math
 // From Multi Theft Auto
 static float WrapAround(float fValue, float fHigh)
 {
-	return fValue - (fHigh * floor((float)(fValue / fHigh)));
+	return fValue - (fHigh * floorf((float)(fValue / fHigh)));
 }
 
 // From Multi Theft Auto
@@ -43,8 +43,8 @@ static float ConvertRadiansToDegrees(float fRotation)
 
 static CVector3 ConvertRadiansToDegrees(const CVector3 &vecRotation)
 {
-	return CVector3(ConvertRadiansToDegrees(vecRotation.fX), 
-					ConvertRadiansToDegrees(vecRotation.fY), 
+	return CVector3(ConvertRadiansToDegrees(vecRotation.fX),
+					ConvertRadiansToDegrees(vecRotation.fY),
 					ConvertRadiansToDegrees(vecRotation.fZ));
 }
 
@@ -56,8 +56,8 @@ static float ConvertDegreesToRadians(float fRotation)
 
 static CVector3 ConvertDegreesToRadians(const CVector3 &vecRotation)
 {
-	return CVector3(ConvertDegreesToRadians(vecRotation.fX), 
-					ConvertDegreesToRadians(vecRotation.fY), 
+	return CVector3(ConvertDegreesToRadians(vecRotation.fX),
+					ConvertDegreesToRadians(vecRotation.fY),
 					ConvertDegreesToRadians(vecRotation.fZ));
 }
 
@@ -119,11 +119,11 @@ static const float UnlerpClamped(const double fStart, const double fPos, const d
 }
 
 // Find the distance between two 2D points
-static float GetDistanceBetweenPoints2D(float x, float y, float xx, float yy) 
+static float GetDistanceBetweenPoints2D(float x, float y, float xx, float yy)
 {
 	float newx = (xx - x);
 	float newy = (yy - y);
-	return sqrt(newx * newx + newy * newy);
+	return sqrtf(newx * newx + newy * newy);
 }
 
 // Find the distance between two 3D points
@@ -132,12 +132,12 @@ static float GetDistanceBetweenPoints3D(float x, float y, float z, float xx, flo
 	float newx = (xx - x);
 	float newy = (yy - y);
 	float newz = (zz - z);
-	return sqrt(newx * newx + newy * newy + newz * newz);
+	return sqrtf(newx * newx + newy * newy + newz * newz);
 }
 
 // Check if a 2D point is within the specified circle
 static bool IsPointInCircle(float circleX, float circleY, float circleDistance, float pointX, float pointY)
-{	
+{
 	float distancebetween = GetDistanceBetweenPoints2D(circleX, circleY, pointX, pointY);
 
 	if(distancebetween < circleDistance)
@@ -222,7 +222,7 @@ struct Vector2
 
 	Vector2(float _fX, float _fY)
 	{
-		fX = fX; fY = fY;
+		fX = _fX; fY = _fY;
 	}
 };
 

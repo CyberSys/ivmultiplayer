@@ -132,11 +132,11 @@ int sq_guiShowMessageBox(SQVM * pVM)
 	g_pClient->GetGUI()->ShowMessageBox(text, title);
 	CGame::SetInputState(false);
 	return 1;
-}	
+}
 
 // guiToggleCursor(bool toggle)
 int sq_guiToggleCursor(SQVM * pVM)
-{	
+{
 	SQBool sbBool;
 	sq_getbool(pVM, -1, &sbBool);
 	bool bBool = (sbBool != 0);
@@ -172,7 +172,7 @@ int sq_guiSetCursorPosition(SQVM * pVM)
 
 // guiGetCursorPosition()
 int sq_guiGetCursorPosition(SQVM * pVM)
-{	
+{
 	// Returning mouse cursor position to script vm:
 	// Cursor position is array [X, Y]
 	RECT curPos = g_pClient->GetGUI()->GetCursorPosition();
@@ -226,7 +226,7 @@ int sq_guiDrawRectangle(SQVM * pVM)
 	g_pClient->GetGraphics()->DrawRect(x, y, x1, y1, ( color >> 8 ) + ( ( color & 0xFF ) << 24 ));
 	sq_pushbool(pVM, true);
 	return 1;
-}	
+}
 
 int sq_triggerServerEvent(SQVM * pVM)
 {
@@ -266,7 +266,7 @@ int sq_getScripts(SQVM * pVM)
 
 // getScriptName()
 int sq_getScriptName(SQVM * pVM)
-{	
+{
 	String strScriptName = g_pClient->GetScriptingManager()->Get(pVM)->GetName();
 	sq_pushstring(pVM, strScriptName.Get(), strScriptName.GetLength());
 	return 1;
@@ -379,7 +379,7 @@ int sq_getCurrentStreetName(SQVM * pVM)
 	return 1;
 }
 
-char szVehicleNames[124][32] = 
+char szVehicleNames[124][32] =
 {
 	"Admiral", "Airtug", "Ambulance", "Banshee", "Benson", "Biff", "Blista Compact", "Bobcat", "Boxville",
 	"Buccaneer", "Burrito", "Burrito", "Bus", "Cabby", "Cavalcade", "Chavos", "Cognoscenti", "Comet",
@@ -524,24 +524,31 @@ int sq_tuneRadio(SQVM * pVM)
 int sq_getGameLanguage(SQVM * pVM)
 {
 	int iLanguage = Scripting::GetCurrentLanguage();
-	String strLanguage;
+	String strLanguage("UNKNOWN");
 
 	switch(iLanguage)
 	{
 	case 0:
 		strLanguage = "AMERICAN";
+		break;
 	case 1:
 		strLanguage = "FRENCH";
+		break;
 	case 2:
 		strLanguage = "GERMAN";
+		break;
 	case 3:
 		strLanguage = "ITALIAN";
+		break;
 	case 4:
 		strLanguage = "SPANISH";
+		break;
 	case 5:
 		strLanguage = "RUSSIAN";
+		break;
 	default:
 		strLanguage = "UNKOWN";
+		break;
 	}
 
 	sq_pushstring(pVM,strLanguage.Get(),-1);
@@ -565,11 +572,11 @@ int sq_importAndLoadGameFile(SQVM * pVM)
 		}
 
 		char szInstallDirectory[MAX_PATH];
-		if(!SharedUtility::ReadRegistryString(HKEY_LOCAL_MACHINE, "Software\\Rockstar Games\\Grand Theft Auto IV", 
+		if(!SharedUtility::ReadRegistryString(HKEY_LOCAL_MACHINE, "Software\\Rockstar Games\\Grand Theft Auto IV",
 			"InstallFolder", NULL, szInstallDirectory, sizeof(szInstallDirectory)) || !SharedUtility::Exists(szInstallDirectory))
 		{
-			if(!SharedUtility::ReadRegistryString(HKEY_CURRENT_USER, "Software\\IVMP", "gtaivdir", NULL, 
-				szInstallDirectory, sizeof(szInstallDirectory)) || 
+			if(!SharedUtility::ReadRegistryString(HKEY_CURRENT_USER, "Software\\IVMP", "gtaivdir", NULL,
+				szInstallDirectory, sizeof(szInstallDirectory)) ||
 				!SharedUtility::Exists(szInstallDirectory))
 			{
 				CLogFile::Printf("[IMPORT] Failed to import file %s into GTA [Failed to find gta iv directory]",strFile.Get());
@@ -577,14 +584,14 @@ int sq_importAndLoadGameFile(SQVM * pVM)
 				return 1;
 			}
 		}
-		
+
 		String strCopyPath = String("%s\\common\\data",szInstallDirectory);
 		if(!SharedUtility::Exists(strCopyPath.Get()))
 			SharedUtility::CreateDirectoryA(strCopyPath.Get());
 
 		String strFolderName = SharedUtility::GetAbsolutePath("clientfiles");
 		strFolderName.AppendF("\\resources\\%s",strFile.Get());
-		
+
 		if(!strcmp(szFile,"hud.dat"))
 			strCopyPath.Append("\\hud_ivmp.dat");
 		else if(!strcmp(szFile,"RadioLogo.dat"))
@@ -623,13 +630,8 @@ int sq_importAndLoadGameFile(SQVM * pVM)
 			return 1;
 		}
 	}
-	else
-	{	
-		CLogFile::Printf("[IMPORT] Failed to import file %s into GTA [Not supported file]",strFile.Get());
-		sq_pushbool(pVM, false);
-		return 1;
-	}
 
+	CLogFile::Printf("[IMPORT] Failed to import file %s into GTA [Not supported file]",strFile.Get());
 	sq_pushbool(pVM, false);
 	return 1;
 }

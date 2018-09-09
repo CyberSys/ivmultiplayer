@@ -195,6 +195,7 @@ private:
 	static void ScriptingSet3DLabelVisible(CBitStream * pBitStream, CPlayerSocket * pSenderSocket);
 	static void ScriptingSet3DLabelStreamingDistance(CBitStream * pBitStream, CPlayerSocket * pSenderSocket);
 	static void ScriptingSet3DLabelDimension(CBitStream * pBitStream, CPlayerSocket * pSenderSocket);
+	static void ScriptingSetVehicleDimension(CBitStream * pBitStream, CPlayerSocket * pSenderSocket);
 
 public:
 	void        Register();

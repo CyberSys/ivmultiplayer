@@ -64,7 +64,7 @@ namespace Modules
 			{
 				CLogFile::Printf("Can't change the name from player %d (Invalid Characters)",playerId);
 				return false;
-			} 
+			}
 
 			return pPlayer->SetName(szName);
 		}
@@ -884,7 +884,7 @@ namespace Modules
 		return false;
 	}
 
-	
+
 	// getEmptyPlayerControlState()
 	CControlState CPlayerModuleNatives::GetEmptyControlState()
 	{
@@ -924,7 +924,7 @@ namespace Modules
 
 		return CControlState();
 	}
-	
+
 	// triggerClientEvent(playerid, eventname, ...)
 	bool CPlayerModuleNatives::TriggerEvent(EntityId playerid, const char * szEventName, const char * szFormat, SquirrelArgumentsInterface* args, ...)
 	{
@@ -980,12 +980,13 @@ namespace Modules
 			}
 			va_end(ap);
 		}
-		
+
 		arguments->serialize(&bsSend);
 		g_pNetworkManager->RPC(RPC_ScriptingEventCall, &bsSend, PRIORITY_HIGH, RELIABILITY_RELIABLE_ORDERED, playerid, false, PACKET_CHANNEL_SCRIPT);
+		delete arguments;
 		return true;
 	}
-	
+
 	// setPlayerColor(playerid, rgba)
 	bool CPlayerModuleNatives::SetColor(EntityId playerId, int color)
 	{
@@ -1031,7 +1032,7 @@ namespace Modules
 			g_pPlayerManager->GetAt(iPlayerId)->SetClothes((unsigned char)iBodyPart, (unsigned char)iClothes);
 			return true;
 		}
-	
+
 		return false;
 	}
 
@@ -1050,7 +1051,7 @@ namespace Modules
 
 			return iClothes;
 		}
-	
+
 		return iClothes;
 	}
 
@@ -1091,7 +1092,7 @@ namespace Modules
 			pPlayer->GiveHelmet();
 			return true;
 		}
-	
+
 		return false;
 	}
 
@@ -1104,7 +1105,7 @@ namespace Modules
 			pPlayer->RemoveHelmet();
 			return true;
 		}
-	
+
 		return false;
 	}
 

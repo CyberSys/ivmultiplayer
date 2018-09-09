@@ -142,7 +142,7 @@ void CPlayerNatives::Register(CScriptingManager * pScriptingManager)
 	pScriptingManager->RegisterFunction("togglePlayerNametagForPlayer",ToggleNametagForPlayer, 3, "iib");
 	pScriptingManager->RegisterFunction("triggerClientEvent", TriggerEvent, -1, NULL);
 	pScriptingManager->RegisterFunction("getPlayerFileChecksum", GetFileChecksum, 2, "ii");
-	
+
 	pScriptingManager->RegisterFunction("setPlayerDimension", SetDimension, 2, "ii");
 	pScriptingManager->RegisterFunction("getPlayerDimension", GetDimension, 1, "i");
 }
@@ -199,7 +199,7 @@ SQInteger CPlayerNatives::SetName(SQVM * pVM)
 
 			sq_pushbool(pVM, false);
 			return 0;
-		} 
+		}
 
 		sq_pushbool(pVM, pPlayer->SetName(szName));
 		return 1;
@@ -1864,7 +1864,7 @@ SQInteger CPlayerNatives::SetClothes(SQVM * pVM)
 		sq_pushbool(pVM, true);
 		return 1;
 	}
-	
+
 	sq_pushbool(pVM, false);
 	return 1;
 }
@@ -1888,7 +1888,7 @@ SQInteger CPlayerNatives::GetClothes(SQVM * pVM)
 
 		return 1;
 	}
-	
+
 	sq_pushbool(pVM, false);
 	return 1;
 }
@@ -1944,7 +1944,7 @@ SQInteger CPlayerNatives::GiveHelmet(SQVM * pVM)
 		sq_pushbool(pVM, true);
 		return 1;
 	}
-	
+
 	sq_pushbool(pVM, false);
 	return 1;
 }
@@ -1962,7 +1962,7 @@ SQInteger CPlayerNatives::RemoveHelmet(SQVM * pVM)
 		sq_pushbool(pVM, true);
 		return 1;
 	}
-	
+
 	sq_pushbool(pVM, false);
 	return 1;
 }
@@ -2082,7 +2082,7 @@ SQInteger CPlayerNatives::requestAnim(SQVM * pVM)
 {
 	EntityId playerId;
 	sq_getentity(pVM, -2, &playerId);
-	
+
 	const char *szAnim = NULL;
 	sq_getstring(pVM,-1,&szAnim);
 
@@ -2102,7 +2102,7 @@ SQInteger CPlayerNatives::releaseAnim(SQVM * pVM)
 {
 	EntityId playerId;
 	sq_getentity(pVM, -2, &playerId);
-	
+
 	const char *szAnim = NULL;
 	sq_getstring(pVM,-1,&szAnim);
 
@@ -2327,7 +2327,7 @@ SQInteger CPlayerNatives::DisplayHudNotification(SQVM * pVM)
 {
 	EntityId playerId;
 	sq_getentity(pVM, -3, &playerId);
-	
+
 	SQInteger iMode;
 	sq_getinteger(pVM, -2, &iMode);
 
@@ -2351,7 +2351,7 @@ SQInteger CPlayerNatives::FollowVehicleMode(SQVM * pVM)
 {
 	EntityId playerId;
 	sq_getentity(pVM, -2, &playerId);
-	
+
 	SQInteger iMode;
 	sq_getinteger(pVM, -1, &iMode);
 
@@ -2471,7 +2471,7 @@ SQInteger CPlayerNatives::SaySpeech(SQVM * pVM)
 {
 	EntityId playerId;
 	sq_getentity(pVM, -3, &playerId);
-	
+
 	const char * szVoice;
 	sq_getstring(pVM, -2, &szVoice);
 
@@ -2510,13 +2510,13 @@ SQInteger CPlayerNatives::ToggleNametagForPlayer(SQVM * pVM)
 		bsSend.Write(forPlayerId);
 		bsSend.Write(bShow);
 		g_pNetworkManager->RPC(RPC_ScriptingTogglePlayerLabelForPlayer, &bsSend, PRIORITY_HIGH, RELIABILITY_RELIABLE_ORDERED, playerId, false);
-		
+
 		sq_pushbool(pVM, true);
 		return 1;
 	}
 	sq_pushbool(pVM, false);
 	return 1;
-	
+
 }
 
 SQInteger CPlayerNatives::DriveAutomatic(SQVM * pVM)
@@ -2586,15 +2586,10 @@ SQInteger CPlayerNatives::SetDimension(SQVM * pVM)
 
 	sq_getinteger(pVM, -1, &iDimension);
 	sq_getentity(pVM, -2, &playerId);
-	
+
 	CPlayer* pPlayer = g_pPlayerManager->GetAt(playerId);
 	if(pPlayer) {
 		pPlayer->SetDimension(iDimension);
-		CBitStream bsSend;
-		bsSend.Write(playerId);
-		bsSend.Write(iDimension);
-
-		g_pNetworkManager->RPC(RPC_ScriptingSetPlayerDimension, &bsSend, PRIORITY_HIGH, RELIABILITY_RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
 		sq_pushbool(pVM, true);
 		return true;
 	}
@@ -2603,7 +2598,7 @@ SQInteger CPlayerNatives::SetDimension(SQVM * pVM)
 }
 
 SQInteger CPlayerNatives::GetDimension(SQVM * pVM)
-{ 
+{
 	EntityId playerId;
 
 	sq_getentity(pVM, -1, &playerId);
@@ -2620,7 +2615,7 @@ SQInteger CPlayerNatives::GetDimension(SQVM * pVM)
 }
 
 SQInteger CPlayerNatives::GetFileChecksum(SQVM * pVM)
-{ 
+{
 	EntityId playerId;
 	int iFile;
 

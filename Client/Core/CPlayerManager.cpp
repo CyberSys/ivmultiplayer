@@ -15,7 +15,7 @@
 
 extern CClient * g_pClient;
 
-DWORD dwPlayerModelHashes[] = 
+Scripting::eModel dwPlayerModelHashes[] =
 {
 	Scripting::MODEL_PLAYER, Scripting::MODEL_M_Y_MULTIPLAYER, Scripting::MODEL_F_Y_MULTIPLAYER, Scripting::MODEL_SUPERLOD,
 	Scripting::MODEL_IG_ANNA, Scripting::MODEL_IG_ANTHONY, Scripting::MODEL_IG_BADMAN, Scripting::MODEL_IG_BERNIE_CRANE,
@@ -63,7 +63,7 @@ DWORD dwPlayerModelHashes[] =
 	Scripting::MODEL_M_Y_FF_BURGER_R, Scripting::MODEL_M_Y_FF_CLUCK_R, Scripting::MODEL_M_Y_FF_RSCAFE, Scripting::MODEL_M_Y_FF_TWCAFE,
 	Scripting::MODEL_M_Y_FF_WSPIZZA_R, Scripting::MODEL_M_Y_FIREMAN, Scripting::MODEL_M_Y_GARBAGE, Scripting::MODEL_M_Y_GOON_01,
 	Scripting::MODEL_M_Y_GYMGUY_01, Scripting::MODEL_M_Y_MECHANIC_02, Scripting::MODEL_M_Y_MODO, Scripting::MODEL_M_Y_NHELIPILOT,
-	Scripting::MODEL_M_Y_PERSEUS, Scripting::MODEL_M_Y_PINDUS_01, Scripting::MODEL_M_Y_PINDUS_02, Scripting::MODEL_M_Y_PINDUS_03, 
+	Scripting::MODEL_M_Y_PERSEUS, Scripting::MODEL_M_Y_PINDUS_01, Scripting::MODEL_M_Y_PINDUS_02, Scripting::MODEL_M_Y_PINDUS_03,
 	Scripting::MODEL_M_Y_PMEDIC, Scripting::MODEL_M_Y_PRISON, Scripting::MODEL_M_Y_PRISONAOM, Scripting::MODEL_M_Y_ROMANCAB, Scripting::MODEL_M_Y_RUNNER,
 	Scripting::MODEL_M_Y_SHOPASST_01, Scripting::MODEL_M_Y_STROOPER, Scripting::MODEL_M_Y_SWAT, Scripting::MODEL_M_Y_SWORDSWALLOW,
 	Scripting::MODEL_M_Y_THIEF, Scripting::MODEL_M_Y_VALET, Scripting::MODEL_M_Y_VENDOR, Scripting::MODEL_M_Y_FRENCHTOM, Scripting::MODEL_M_Y_JIM_FITZ,
@@ -190,10 +190,10 @@ DWORD dwPlayerModelHashes[] =
 
 DWORD SkinIdToModelHash(int modelid)
 {
-	if(modelid >= 0 || modelid < ARRAY_LENGTH(dwPlayerModelHashes))
-		return dwPlayerModelHashes[modelid];
+	if(modelid < ARRAY_LENGTH(dwPlayerModelHashes))
+		return static_cast<DWORD>(dwPlayerModelHashes[modelid]);
 
-	return 0x00;
+	return 0;
 }
 
 int ModelHashToSkinId(DWORD modelhash)
@@ -393,7 +393,7 @@ void CPlayerManager::SetLocalPlayer(EntityId playerId, CNetworkPlayer * pPlayer)
 bool CPlayerManager::IsPlayerLimitReached( void )
 {
 	int count = 0;
-	for(EntityId x = 0; x < MAX_PLAYERS; ++x) 
+	for(EntityId x = 0; x < MAX_PLAYERS; ++x)
 	{
 		if(DoesExist(x))
 			count++;

@@ -219,9 +219,8 @@ void CClientScriptManager::RemoveScript(String strName)
 
 		if(pClientScript->strName == strName)
 		{
-			if(pClientScript)
-				delete pClientScript;
 			m_clientScripts.remove(pClientScript);
+			delete pClientScript;
 			pClientScript = NULL;
 			CLogFile::Printf("ClientScript %s removed.", strName.Get());
 			return;

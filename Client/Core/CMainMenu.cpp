@@ -59,7 +59,7 @@ CMainMenu::CMainMenu()
 		CEGUI::ImagesetManager::getSingleton().createFromImageFile("Download", "Download.png");
 		CEGUI::ImagesetManager::getSingleton().createFromImageFile("Chat", "Chat.png");
 	}
-	catch(CEGUI::InvalidRequestException e)
+	catch(CEGUI::InvalidRequestException &e)
 	{
 		String strFile = e.getMessage().c_str();
 		strFile = strFile.SubStr(strFile.Find(" - ")+3, (unsigned int)-1);
@@ -67,8 +67,9 @@ CMainMenu::CMainMenu()
 		MessageBox(NULL, str.C_String(), "IV:MP Error", MB_OK | MB_ICONERROR);
 		ExitProcess(0);
 	}
-	catch(CEGUI::Exception e)
+	catch(CEGUI::Exception &e)
 	{
+		(void)e;
 		MessageBox(NULL, "IV:MP failed to load. Check CEGUI.log for details.", "IV:MP Error", MB_OK | MB_ICONERROR);
 		ExitProcess(0);
 	}
@@ -259,7 +260,7 @@ void CMainMenu::Process()
 			pGraphics->DrawRect(0.0, 0.0, fWidth, boxHeight, ( PAUSE_MENU_BACKGROUND >> 8 ) + ( ( PAUSE_MENU_BACKGROUND & 0xFF ) << 24 ));
 			pGraphics->DrawRect(0.0, fHeight-boxHeight, fWidth, boxHeight, ( PAUSE_MENU_BACKGROUND >> 8 ) + ( ( PAUSE_MENU_BACKGROUND & 0xFF ) << 24 ));
 		}
-		
+
 		// Process the cinematic main menu view, as long as we arent connected and the game is loaded.
 		CCamera * pCamera = g_pClient->GetCamera();
 		CNetworkManager * pNetworkManager = g_pClient->GetNetworkManager();
@@ -271,7 +272,7 @@ void CMainMenu::Process()
 				if(m_iCameraState >= 2)
 					m_iCameraState = 1;
 
-				switch(m_iCameraState) 
+				switch(m_iCameraState)
 				{
 					case 1:
 						pCamera->SetPosition(CVector3(HAPPINESS_CAMERA_POS));
@@ -461,7 +462,7 @@ bool CMainMenu::GetHostAndPort(String strHostAndPort, String& strHost, unsigned 
 	{
 		// Set the host
 		strHost = strHostAndPort;
-		
+
 		// Set the default port (9999)
 		usPort = 9999;
 	}

@@ -280,7 +280,7 @@ void CVehicle::StoreInVehicleSync(InVehicleSyncData * syncPacket)
 
 void CVehicle::StorePassengerSync(PassengerSyncData * syncPacket)
 {
-	
+
 }
 
 
@@ -486,7 +486,7 @@ bool CVehicle::GetIndicatorState(unsigned char ucSlot)
 {
 	if(ucSlot >= 0 && ucSlot <= 3)
 		return m_bIndicatorState[ucSlot];
-	
+
 	return false;
 }
 
@@ -771,7 +771,7 @@ float CVehicle::GetPetrolTankHealth()
 void CVehicle::SetPetrolTankHealth(float fHealth)
 {
 	m_fPetrolTankHealth = fHealth;
-	
+
 	CBitStream bsSend;
 	bsSend.Write(m_vehicleId);
 	bsSend.Write(m_fPetrolTankHealth);
@@ -825,7 +825,7 @@ void CVehicle::SetDimension(DimensionId ucDimension)
 	CBitStream bsSend;
 	bsSend.Write(m_vehicleId);
 	bsSend.Write(ucDimension);
-	g_pNetworkManager->RPC(RPC_ScriptingSetPlayerDimension, &bsSend, PRIORITY_HIGH, RELIABILITY_RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
+	g_pNetworkManager->RPC(RPC_ScriptingSetVehicleDimension, &bsSend, PRIORITY_HIGH, RELIABILITY_RELIABLE_ORDERED, INVALID_ENTITY_ID, true);
 }
 
 void CVehicle::ExplodeCar(EntityId playerId)

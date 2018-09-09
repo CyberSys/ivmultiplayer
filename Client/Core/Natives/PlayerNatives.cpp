@@ -78,7 +78,7 @@ SQInteger CPlayerNatives::GetLocal(SQVM * pVM)
 		sq_pushentity(pVM, pLocalPlayer->GetPlayerId());
 	else
 		sq_pushinteger(pVM,-1);
-	
+
 	return 1;
 }
 
@@ -784,6 +784,7 @@ SQInteger CPlayerNatives::TogglePhysics(SQVM * pVM)
 	// Get the local player
 	CLocalPlayer * pLocalPlayer = g_pClient->GetLocalPlayer();
 
+	// @FIXME: broken, parameters are not read!!
 	if(pLocalPlayer && pLocalPlayer->IsSpawned())
 	{
 		bool bToggle = (bInvincible != 0);

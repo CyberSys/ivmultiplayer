@@ -84,7 +84,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 HWND hMainWindow;
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; 
+   hInst = hInstance;
 
    hMainWindow = CreateWindow(windowClass.c_str(), windowTitle.c_str(), WS_CAPTION | WS_SYSMENU | BS_BITMAP,
       CW_USEDEFAULT, 0, 450, 400, NULL, NULL, hInstance, NULL);
@@ -126,7 +126,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
              HDC hdc;
              PAINTSTRUCT ps;
-             
+
 			 hdc = BeginPaint( hMainWindow, &ps );
              HWND textHwnd = GetWindow( hMainWindow, GW_CHILD );
 
@@ -143,8 +143,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				SetTextColor(hdc,RGB(255,255,255));
 
                  TextOut( hdc, 15,25, "Unfortunately IV:MP has crashed :/", strlen("Unfortunately IV:MP has crashed :/") );
+
+				 ReleaseDC(textHwnd, textHdc);
              }
-             
+
              EndPaint( hMainWindow, &ps );
         }
 		case WM_CTLCOLORSTATIC:
@@ -153,7 +155,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			SetBkMode((HDC)wParam,TRANSPARENT);
 			return (LRESULT)GetStockObject(BLACK_BRUSH);
 		}
-		
+
 		case WM_COMMAND:
 		{
 			int wmId, wmEvent;

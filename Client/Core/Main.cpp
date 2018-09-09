@@ -15,12 +15,16 @@ CClient * g_pClient = NULL;
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD fdwReason, LPVOID lpReserved)
 {
+	MessageBox(NULL, "OHO", NULL, NULL);
+
 	switch(fdwReason)
 	{
 	case DLL_PROCESS_ATTACH:
 		{
 			// Disable thread library notifications
 			DisableThreadLibraryCalls(hModule);
+
+
 
 			// Create the client instance
 			g_pClient = new CClient();

@@ -38,7 +38,7 @@ public:
 	static void           InstallMethodPatch(DWORD dwHookAddress, DWORD dwFunctionAddress);
 	static DWORD          GetFunctionAddress(char * szLibrary, char * szFunction);
 	static DWORD          GetFunctionAddress(char * szLibrary, unsigned int uOrdinal);
-	static void         * InstallDetourPatch(char * szLibrary, char * szFunction, DWORD dwFunctionAddress);
+	static void         * InstallDetourPatch(char * szLibrary, char * szFunction, DWORD dwFunctionAddress, int iSize = 5);
 	static void         * InstallDetourPatch(char * szLibrary, unsigned int uOrdinal, DWORD dwFunctionAddress);
 	static BYTE			  InstallDetourPatchWithData(char * szLibrary, unsigned int uOrdinal, DWORD dwFunctionAddress);
 	static void           UninstallDetourPatch(void * pTrampoline, DWORD dwFunctionAddress);

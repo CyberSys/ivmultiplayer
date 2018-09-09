@@ -201,4 +201,5 @@ enum eRPCIdentfiers
 	RPC_ScriptingSet3DLabelVisible,
 	RPC_ScriptingSet3DLabelStreamingDistance,
 	RPC_ScriptingSet3DLabelDimension,
+	RPC_ScriptingSetVehicleDimension,
 };
