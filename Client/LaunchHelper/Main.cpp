@@ -51,15 +51,15 @@ BOOL WINAPI CreateProcessW_Hook(LPCWSTR lpApplicationName, LPWSTR lpCommandLine,
 	char szInstallDirectory[MAX_PATH];
 	bool bFoundCustomDirectory = false;
 
-	if(!SharedUtility::ReadRegistryString(HKEY_LOCAL_MACHINE, "Software\\Rockstar Games\\Grand Theft Auto IV", 
-										  "InstallFolder", NULL, szInstallDirectory, sizeof(szInstallDirectory)) || 
+	if(!SharedUtility::ReadRegistryString(HKEY_LOCAL_MACHINE, "Software\\Rockstar Games\\Grand Theft Auto IV",
+										  "InstallFolder", NULL, szInstallDirectory, sizeof(szInstallDirectory)) ||
 	   !SharedUtility::Exists(szInstallDirectory))
 	{
-		if(!SharedUtility::ReadRegistryString(HKEY_CURRENT_USER, "Software\\IVMP", "gtaivdir", NULL, 
-											  szInstallDirectory, sizeof(szInstallDirectory)) || 
+		if(!SharedUtility::ReadRegistryString(HKEY_CURRENT_USER, "Software\\IVMP", "gtaivdir", NULL,
+											  szInstallDirectory, sizeof(szInstallDirectory)) ||
 		   !SharedUtility::Exists(szInstallDirectory))
 		{
-			if(ShowMessageBox("Failed to retrieve GTA IV install directory from registry. Specify your GTA IV path now?", 
+			if(ShowMessageBox("Failed to retrieve GTA IV install directory from registry. Specify your GTA IV path now?",
 				(MB_ICONEXCLAMATION | MB_OKCANCEL)) == IDOK)
 			{
 				// Taken from http://vcfaq.mvps.org/sdk/20.htm
@@ -131,7 +131,7 @@ BOOL WINAPI CreateProcessW_Hook(LPCWSTR lpApplicationName, LPWSTR lpCommandLine,
 		{
 			// Terminate the process
 			TerminateProcess(lpProcessInformation->hProcess, 0);
-			String strError("Unknown error. Cannot launch IV: Multiplayer.");
+			String strError("Unknown error - %i. Cannot launch IV: Multiplayer.", iReturn);
 
 			if(iReturn == 1)
 				strError = "Failed to write library path into remote process. Cannot launch IV: Multiplayer.";
@@ -190,6 +190,20 @@ LRESULT ProcessMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	switch(uMsg)
 	{
 	case WM_DRAWITEM:
+
+#if 1
+		{
+			// New launcher, steam.
+
+			// Simulate the Play button to be pressed
+
+			WPARAM wParam = MAKEWPARAM(IDOK, BN_CLICKED);
+			CallWindowProc(oldWndProc, hwnd, WM_COMMAND, wParam, 0);
+
+			// make sure the window is hidden so it's not getting into the taskbar
+			g_pfnShowWindow(hwnd, FALSE);
+		}
+#else
 		if(eSocialClubWindowState == STATE_LOGIN_WINDOW && wParam == 4)
 		{
 			// First Window (RGSC Login, username, pw, etc.), button 4 = Play Offline
@@ -216,6 +230,7 @@ LRESULT ProcessMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			// make sure the window is hidden so it's not getting into the taskbar
 			g_pfnShowWindow(hwnd, FALSE);
 		}
+#endif
 		break;
 	case WM_ACTIVATE:
 	case WM_ACTIVATEAPP:
@@ -235,6 +250,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD fdwReason, LPVOID lpReserved)
 			// Disable thread library notifications
 			DisableThreadLibraryCalls(hModule);
 
+
 			// Install the SetTimer hook
 			g_pfnSetTimer = (SetTimer_t)CPatcher::InstallDetourPatch("User32.dll", "SetTimer", (DWORD)SetTimer_Hook);
 
@@ -242,7 +258,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD fdwReason, LPVOID lpReserved)
 			g_pfnCreateProcessW = (CreateProcessW_t)CPatcher::InstallDetourPatch("Kernel32.dll", "CreateProcessW", (DWORD)CreateProcessW_Hook);
 
 			// Install the ShowWindow hook
-			g_pfnShowWindow = (ShowWindow_t)CPatcher::InstallDetourPatch("User32.dll", "ShowWindow", (DWORD)ShowWindow_Hook);
+			// @FIXME: on win10 ShowWindow size of the original code have 6 bytes, these detours are not reliable and should be rewritten
+			g_pfnShowWindow = (ShowWindow_t)CPatcher::InstallDetourPatch("User32.dll", "ShowWindow", (DWORD)ShowWindow_Hook, 6);
 		}
 		break;
 	case DLL_PROCESS_DETACH:
